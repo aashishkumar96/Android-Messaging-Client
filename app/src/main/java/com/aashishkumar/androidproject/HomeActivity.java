@@ -104,9 +104,10 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_connections) {
-            //loadFragment(new ConnectionsFragment());
+        if (id == R.id.nav_home) {
+            loadFragment(new HomeFragment());
+        } else if (id == R.id.nav_connections) {
+            loadFragment(new ConnectionsFragment());
         } else if (id == R.id.nav_weather) {
             //loadFragment(new WeatherFragment());
         }
@@ -115,4 +116,5 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

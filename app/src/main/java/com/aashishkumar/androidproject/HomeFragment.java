@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -24,6 +25,18 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Display the email/username used to login
+        if (getArguments() != null) {
+            String emailAdd = getArguments().getString("emailAdd");
+            TextView tv = getActivity().findViewById(R.id.textViewEmail);
+            tv.setText(emailAdd);
+        }
     }
 
 }

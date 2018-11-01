@@ -1,5 +1,6 @@
 package com.aashishkumar.androidproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,7 +50,15 @@ public class HomeActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             //Save the home fragment
             mHomeFragment = new HomeFragment();
-            Log.d("HERE", "Successfully saved home fragment");
+            //Log.d("HERE", "Successfully saved home fragment");
+
+            // Get the email used to login
+            Intent intent = getIntent();
+            String emailAdd = intent.getStringExtra("email");
+            Bundle args = new Bundle();
+            args.putString("emailAdd", emailAdd);
+            mHomeFragment.setArguments(args);
+
             if (findViewById(R.id.activity_home) != null) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.activity_home, mHomeFragment)
@@ -105,7 +114,7 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_home) {
-            loadFragment(new HomeFragment());
+            loadFragment(mHomeFragment);
         } else if (id == R.id.nav_connections) {
             loadFragment(new ConnectionsFragment());
         } else if (id == R.id.nav_weather) {

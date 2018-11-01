@@ -11,4 +11,16 @@
     <string name="nav_drawer_connections">Connections</string>
     <string name="nav_drawer_weather">Weather</string>
     <string name="nav_drawer_home">Home</string>
+
+
+    <string name="all_register">REGISTER</string>
+    <string name="all_signin">SIGN IN</string>
+    <string name="all_login">LOG IN</string>
+    <string name="email_text">Email</string>
+    <string name="unam_text">Username</string>
+    <string name="firstname_text">First name</string>
+    <string name="lname_text">Last name</string>
+    <string name="password_text">Password</string>
+    <string name="retype_password_text">Retype Password</string>
+
 </resources>

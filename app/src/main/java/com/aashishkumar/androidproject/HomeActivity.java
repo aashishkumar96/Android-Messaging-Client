@@ -118,7 +118,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_connections) {
             loadFragment(new ConnectionsFragment());
         } else if (id == R.id.nav_weather) {
-            //loadFragment(new WeatherFragment());
+            loadFragment(new WeatherFragment());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

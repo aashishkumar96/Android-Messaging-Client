@@ -17,8 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.aashishkumar.androidproject.connections.DummyContent;
+
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ConnectionsFragment.OnListFragmentInteractionListener,
+        SearchResultFragment.OnListFragmentInteractionListener {
 
     private HomeFragment mHomeFragment;
 
@@ -126,4 +130,14 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onConnectionListFragmentInteraction(DummyContent.Connection item) {
+        //Init the ConnectionViewFragment to display connection details.
+
+    }
+
+    @Override
+    public void onSearchListFragmentInteraction(com.aashishkumar.androidproject.dummy.DummyContent.DummyItem item) {
+        //Init the SearchResultViewFragment to display search result details
+    }
 }

@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.aashishkumar.androidproject.connections.DummyContent;
 import com.aashishkumar.androidproject.model.Credentials;
 
 public class MainActivity extends AppCompatActivity

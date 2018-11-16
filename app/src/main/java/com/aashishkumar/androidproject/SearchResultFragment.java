@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aashishkumar.androidproject.connections.DummyContent;
-import com.aashishkumar.androidproject.connections.DummyContent.Connection;
+import com.aashishkumar.androidproject.dummy.DummyContent;
+import com.aashishkumar.androidproject.dummy.DummyContent.DummyItem;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -19,9 +21,11 @@ import com.aashishkumar.androidproject.connections.DummyContent.Connection;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ConnectionsFragment extends Fragment {
+public class SearchResultFragment extends Fragment {
 
+    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -29,12 +33,13 @@ public class ConnectionsFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ConnectionsFragment() {
+    public SearchResultFragment() {
     }
 
+    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ConnectionsFragment newInstance(int columnCount) {
-        ConnectionsFragment fragment = new ConnectionsFragment();
+    public static SearchResultFragment newInstance(int columnCount) {
+        SearchResultFragment fragment = new SearchResultFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -53,7 +58,7 @@ public class ConnectionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_connections_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_searchresult_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -64,12 +69,12 @@ public class ConnectionsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyConnectionsRecyclerViewAdapter(DummyContent.CONNECTIONS, mListener));
+            recyclerView.setAdapter(new MySearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
     }
 
-/*
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,7 +91,6 @@ public class ConnectionsFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -99,6 +103,7 @@ public class ConnectionsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onConnectionListFragmentInteraction(Connection item);
+        // TODO: Update argument type and name
+        void onSearchListFragmentInteraction(DummyItem item);
     }
 }

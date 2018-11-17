@@ -1,11 +1,13 @@
 package com.aashishkumar.androidproject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,14 +19,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aashishkumar.androidproject.connections.DummyContent;
+import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ConnectionsFragment.OnListFragmentInteractionListener,
-        SearchResultFragment.OnListFragmentInteractionListener {
+                   WaitFragment.OnFragmentInteractionListener,
+                   ConnectionOptionFragment.OnConnectionOptionFragmentInteractionListener,
+                   ConnectionFragment.OnConnectionFragmentInteractionListener,
+                   NoConnectionFragment.OnNoConnectionFragmentInteractionListener {
 
     private HomeFragment mHomeFragment;
+    private String mMemberID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +67,10 @@ public class HomeActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             //Save the home fragment
             mHomeFragment = new HomeFragment();
-            //Log.d("HERE", "Successfully saved home fragment");
-
             // Get the email used to login
             Intent intent = getIntent();
             String emailAdd = intent.getStringExtra("email");
+            mMemberID = intent.getStringExtra("id");
             Bundle args = new Bundle();
             args.putString("emailAdd", emailAdd);
             mHomeFragment.setArguments(args);
@@ -69,6 +81,7 @@ public class HomeActivity extends AppCompatActivity
                         .commit();
             }
         }
+
     }
 
     @Override
@@ -120,7 +133,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             loadFragment(mHomeFragment);
         } else if (id == R.id.nav_connections) {
-            loadFragment(new ConnectionsFragment());
+            loadFragment(new ConnectionOptionFragment());
         } else if (id == R.id.nav_weather) {
             loadFragment(new WeatherFragment());
         }
@@ -131,13 +144,121 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onConnectionListFragmentInteraction(DummyContent.Connection item) {
-        //Init the ConnectionViewFragment to display connection details.
-
+    public void onSearchClicked() {
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_home, new SearchConnectionFragment())
+                .addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
-    public void onSearchListFragmentInteraction(com.aashishkumar.androidproject.dummy.DummyContent.DummyItem item) {
-        //Init the SearchResultViewFragment to display search result details
+    public void onViewFriendsClicked() {
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_connections))
+                .appendPath(getString(R.string.ep_viewfriends))
+                .build();
+
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("id_self", "4");
+        } catch (JSONException e) {
+            Log.wtf("ERROR! ", e.getMessage());
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleConnectionOnPostExecute)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+
+    }
+
+    private void handleConnectionOnPostExecute(final String result) {
+
+        try {
+            JSONObject root = new JSONObject(result);
+            JSONArray data = root.getJSONArray("result");
+
+            List<Connection> connections = new ArrayList<>();
+
+            if (data.length() == 0) {
+                //Log.e("ERROR", "no connections");
+                onWaitFragmentInteractionHide();
+                loadFragment(new NoConnectionFragment());
+            } else {
+
+                for(int i = 0; i < data.length(); i++) {
+                    JSONObject jsonConnection = data.getJSONObject(i);
+                    connections.add(new Connection.Builder(jsonConnection.getString("username"))
+                        .addFirstName(jsonConnection.getString("firstname"))
+                        .addLastName(jsonConnection.getString("lastname"))
+                        .build());
+                }
+
+                Connection[] connectionsArray = new Connection[connections.size()];
+                connectionsArray = connections.toArray(connectionsArray);
+
+                Bundle args = new Bundle();
+                args.putSerializable(ConnectionFragment.ARG_CONNECTION_LIST, connectionsArray);
+                Fragment frag = new ConnectionFragment();
+                frag.setArguments(args);
+                onWaitFragmentInteractionHide();
+                loadFragment(frag);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+            //notify user
+            onWaitFragmentInteractionHide();
+        }
+    }
+
+    private void handleErrorInTask(String result) {
+        Log.e("ERROR!", result);
+    }
+
+    @Override
+    public void onWaitFragmentInteractionShow() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.activity_home, new WaitFragment(), "WAIT")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onWaitFragmentInteractionHide() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
+                .commit();
+    }
+
+    @Override
+    public void onAddFriendClicked() {
+        onSearchClicked();
+    }
+
+    @Override
+    public void onListFragmentInteraction(Connection item) {
+        Bundle args = new Bundle();
+        args.putString("username", item.getUsername());
+        args.putString("fname", item.getFirstName());
+        args.putString("lname", item.getLastName());
+        ConnectionProfileFragment frag = new ConnectionProfileFragment();
+        frag.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_home, frag)
+                .addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 }

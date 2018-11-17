@@ -1,25 +1,24 @@
 package com.aashishkumar.androidproject;
 
+
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  */
-public class SearchFragment extends Fragment {
+public class NoConnectionFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnNoConnectionFragmentInteractionListener mListener;
 
-    public SearchFragment() {
+    public NoConnectionFragment() {
         // Required empty public constructor
     }
 
@@ -28,24 +27,20 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        View v = inflater.inflate(R.layout.fragment_no_connection, container, false);
+        Button add = (Button) v.findViewById(R.id.add_friend_button);
+        add.setOnClickListener(view ->mListener.onAddFriendClicked());
+        return v;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnNoConnectionFragmentInteractionListener) {
+            mListener = (OnNoConnectionFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnNoConnectionFragmentInteractionListener");
         }
     }
 
@@ -54,7 +49,6 @@ public class SearchFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -65,8 +59,7 @@ public class SearchFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnNoConnectionFragmentInteractionListener {
+        void onAddFriendClicked();
     }
 }

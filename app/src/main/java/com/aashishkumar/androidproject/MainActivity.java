@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.aashishkumar.androidproject.connections.DummyContent;
 import com.aashishkumar.androidproject.model.Credentials;
 
 public class MainActivity extends AppCompatActivity
@@ -27,9 +26,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoginSuccess(Credentials mCredentials) {
+    public void onLoginSuccess(Credentials mCredentials, String id) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         intent.putExtra("email", mCredentials.getEmail());
+        intent.putExtra("id", id);
         MainActivity.this.startActivity(intent);
     }
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRegisterSuccess(Credentials mCredentials) {
-        onLoginSuccess(mCredentials);
+
     }
 
     @Override

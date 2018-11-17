@@ -27,6 +27,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private OnLoginFragmentInteractionListener mListener;
     //private static EditText email, password;
     private Credentials mCredentials;
+    private String mMemberID;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -38,9 +39,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
-
-        //email = (EditText) v.findViewById(R.id.text_email_reg);
-        //password = (EditText) v.findViewById(R.id.text_password_reg);
 
         Button login = (Button) v.findViewById(R.id.signinBtn_login_fragment);
         login.setOnClickListener(this);
@@ -137,11 +135,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
+            mMemberID = resultsJSON.getString("memberid");
 
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onLoginSuccess(mCredentials);
+                mListener.onLoginSuccess(mCredentials, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.emailText_login_fragment))
@@ -190,7 +189,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public interface OnLoginFragmentInteractionListener
              extends WaitFragment.OnFragmentInteractionListener {
-        void onLoginSuccess(Credentials mCredentials );
+        void onLoginSuccess(Credentials mCredentials, String id);
         void onRegisterClicked();
     }
 }

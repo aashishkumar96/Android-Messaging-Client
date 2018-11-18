@@ -38,6 +38,10 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mFullName.setText(mValues.get(position).getFullName());
 
+        if (mValues.get(position).getVerified() == 0) {
+            holder.mUsername.setText(mValues.get(position).getUsername() + " [UNVERIFIED]");
+        }
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

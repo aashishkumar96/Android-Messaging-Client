@@ -200,6 +200,7 @@ public class HomeActivity extends AppCompatActivity
                     connections.add(new Connection.Builder(jsonConnection.getString("username"))
                         .addFirstName(jsonConnection.getString("firstname"))
                         .addLastName(jsonConnection.getString("lastname"))
+                        .addVerified(jsonConnection.getInt("verified"))
                         .build());
                 }
 

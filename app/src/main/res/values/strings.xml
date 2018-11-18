@@ -31,6 +31,8 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_my_locations">MyLocationsActivity</string>
+    <string name="title_activity_weather">Weather</string>
 
 
 </resources>

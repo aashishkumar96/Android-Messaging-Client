@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -34,10 +33,15 @@ public class HomeActivity extends AppCompatActivity
                    WaitFragment.OnFragmentInteractionListener,
                    ConnectionOptionFragment.OnConnectionOptionFragmentInteractionListener,
                    ConnectionFragment.OnConnectionFragmentInteractionListener,
-                   NoConnectionFragment.OnNoConnectionFragmentInteractionListener {
+                   NoConnectionFragment.OnNoConnectionFragmentInteractionListener,
+                   ConnectionProfileFragment.OnConectionProfileFragmentInteractionListener,
+                   SearchConnectionFragment.OnSearchConnetionFragmentInteractionListener,
+                   SearchResultFragment.OnSearchListFragmentInteractionListener,
+                   SearchProfileFragment.OnSearchProfileFragmentInteractionListener {
 
     private HomeFragment mHomeFragment;
     private String mMemberID;
+    private String mFriendID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +168,7 @@ public class HomeActivity extends AppCompatActivity
         JSONObject msg = new JSONObject();
 
         try {
-            msg.put("id_self", "4");
+            msg.put("id_self", mMemberID);
         } catch (JSONException e) {
             Log.wtf("ERROR! ", e.getMessage());
         }
@@ -245,7 +249,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(Connection item) {
+    public void onConnectionListFragmentInteraction(Connection item) {
         Bundle args = new Bundle();
         args.putString("username", item.getUsername());
         args.putString("fname", item.getFirstName());
@@ -260,5 +264,80 @@ public class HomeActivity extends AppCompatActivity
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onChatClicked() {
+        //Update later
+    }
+
+    @Override
+    public void onRemoveClicked() {
+        //Update later
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+
+    }
+
+    @Override
+    public void onSearchListFragmentInteraction(Connection item) {
+        mFriendID = item.getMemID();
+        Bundle args = new Bundle();
+        args.putString("username", item.getUsername());
+        args.putString("fname", item.getFirstName());
+        args.putString("lname", item.getLastName());
+        SearchProfileFragment frag = new SearchProfileFragment();
+        frag.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_home, frag)
+                .addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    @Override
+    public void onAddToListClicked() {
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_connections))
+                .appendPath(getString(R.string.ep_addfriend))
+                .build();
+
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("id_self", mMemberID);
+            msg.put("id_friend", mFriendID);
+        } catch (JSONException e) {
+            Log.wtf("ERROR! ", e.getMessage());
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleAddFriendOnPostExecute)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+
+    }
+
+    private void handleAddFriendOnPostExecute(String result) {
+        try {
+
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            onWaitFragmentInteractionHide();
+
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR!", e.getMessage());
+            //notify user
+            onWaitFragmentInteractionHide();
+        }
     }
 }

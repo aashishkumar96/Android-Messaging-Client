@@ -14,27 +14,21 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConnectionProfileFragment extends Fragment {
+public class SearchProfileFragment extends Fragment {
 
-    private OnConectionProfileFragmentInteractionListener mListener;
+    private OnSearchProfileFragmentInteractionListener mListener;
 
-    public ConnectionProfileFragment() {
+    public SearchProfileFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_connection_profile, container, false);
-
-        Button chat = (Button) v.findViewById(R.id.button_chat_profile_frag);
-        chat.setOnClickListener(view ->mListener.onChatClicked());
-
-        Button remove = (Button) v.findViewById(R.id.button_remove_profile_frag);
-        remove.setOnClickListener(view ->mListener.onRemoveClicked());
-
+        View v = inflater.inflate(R.layout.fragment_search_profile, container, false);
+        Button addFriend = (Button) v.findViewById(R.id.button_add_searchprofile_frag);
+        addFriend.setOnClickListener(view ->mListener.onAddToListClicked());
         return v;
     }
 
@@ -44,29 +38,27 @@ public class ConnectionProfileFragment extends Fragment {
 
         if (getArguments() != null) {
             String username = getArguments().getString("username");
-            TextView tv = getActivity().findViewById(R.id.username_text_profile_frag);
+            TextView tv = getActivity().findViewById(R.id.username_text_searchprofile_frag);
             tv.setText(username);
 
             String fname = getArguments().getString("fname");
-            TextView tv1 = getActivity().findViewById(R.id.fname_text_profile_frag);
+            TextView tv1 = getActivity().findViewById(R.id.fname_text_searchprofile_frag);
             tv1.setText(fname);
 
             String lname = getArguments().getString("lname");
-            TextView tv2 = getActivity().findViewById(R.id.lname_text_profile_frag);
+            TextView tv2 = getActivity().findViewById(R.id.lname_text_searchprofile_frag);
             tv2.setText(lname);
-
         }
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnConectionProfileFragmentInteractionListener) {
-            mListener = (OnConectionProfileFragmentInteractionListener) context;
+        if (context instanceof OnSearchProfileFragmentInteractionListener) {
+            mListener = (OnSearchProfileFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnConectionProfileFragmentInteractionListener");
+                    + " must implement OnSearchProfileFragmentInteractionListener");
         }
     }
 
@@ -76,9 +68,7 @@ public class ConnectionProfileFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnConectionProfileFragmentInteractionListener {
-        void onChatClicked();
-        void onRemoveClicked();
+    public interface OnSearchProfileFragmentInteractionListener {
+        void onAddToListClicked();
     }
-
 }

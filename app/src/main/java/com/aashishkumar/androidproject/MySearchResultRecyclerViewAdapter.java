@@ -6,21 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.ConnectionFragment.OnConnectionFragmentInteractionListener;
+import com.aashishkumar.androidproject.SearchResultFragment.OnSearchListFragmentInteractionListener;
 import com.aashishkumar.androidproject.connections.Connection;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Connection} and makes a call to the
- * specified {@link OnConnectionFragmentInteractionListener}.
+ * specified {@link OnSearchListFragmentInteractionListener}.
+ * TODO: Replace the implementation with code for your data type.
  */
-public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConnectionRecyclerViewAdapter.ViewHolder> {
+public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySearchResultRecyclerViewAdapter.ViewHolder> {
 
     private final List<Connection> mValues;
-    private final OnConnectionFragmentInteractionListener mListener;
+    private final OnSearchListFragmentInteractionListener mListener;
 
-    public MyConnectionRecyclerViewAdapter(List<Connection> items, OnConnectionFragmentInteractionListener listener) {
+    public MySearchResultRecyclerViewAdapter(List<Connection> items, OnSearchListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -28,7 +29,7 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_connection, parent, false);
+                .inflate(R.layout.fragment_searchresult, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,14 +39,13 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mFullName.setText(mValues.get(position).getFullName());
 
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onConnectionListFragmentInteraction(holder.mItem);
+                    mListener.onSearchListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -65,9 +65,8 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mUsername = (TextView) view.findViewById(R.id.username_connection_frag);
-            mFullName = (TextView) view.findViewById(R.id.fullname_connection_frag);
-            //mLastName
+            mUsername = (TextView) view.findViewById(R.id.username_searchresult_frag);
+            mFullName = (TextView) view.findViewById(R.id.fullname_searchresult_frag);
         }
 
         @Override

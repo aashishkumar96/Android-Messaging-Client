@@ -4,29 +4,34 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.aashishkumar.androidproject.connections.Connection;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchConnectionFragment.OnFragmentInteractionListener} interface
+ * {@link OnSearchConnetionFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class SearchConnectionFragment extends Fragment implements View.OnClickListener {
 
-    private OnFragmentInteractionListener mListener;
+    private OnSearchConnetionFragmentInteractionListener mListener;
 
     public SearchConnectionFragment() {
         // Required empty public constructor
@@ -117,21 +122,67 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
      * @param result the JSON formatted String response from the web service
      */
     private void handleSearchOnPost(String result) {
+        try {
+            JSONObject root = new JSONObject(result);
+            JSONArray data = root.getJSONArray("result");
 
+            List<Connection> connections = new ArrayList<>();
+
+            if (data.length() == 0) {
+                //Log.e("ERROR", "no connections");
+                //onWaitFragmentInteractionHide();
+                //loadFragment(new NoConnectionFragment());
+            } else {
+
+                for(int i = 0; i < data.length(); i++) {
+                    JSONObject jsonConnection = data.getJSONObject(i);
+                    connections.add(new Connection.Builder(jsonConnection.getString("username"))
+                            .addFirstName(jsonConnection.getString("firstname"))
+                            .addLastName(jsonConnection.getString("lastname"))
+                            .addID(jsonConnection.getString("memberid"))
+                            .build());
+                }
+
+                Connection[] connectionsArray = new Connection[connections.size()];
+                connectionsArray = connections.toArray(connectionsArray);
+
+                Bundle args = new Bundle();
+                args.putSerializable(SearchResultFragment.ARG_SEARCH_LIST, connectionsArray);
+                Fragment frag = new SearchResultFragment();
+                frag.setArguments(args);
+                //onWaitFragmentInteractionHide();
+                loadFragment(frag);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+            //notify user
+            //onWaitFragmentInteractionHide();
+        }
+
+    }
+
+    private void loadFragment(Fragment frag) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_home, frag)
+                .addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
     }
 
 
 
 
-/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnSearchConnetionFragmentInteractionListener) {
+            mListener = (OnSearchConnetionFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnSearchConnetionFragmentInteractionListener");
         }
     }
 
@@ -140,7 +191,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
         super.onDetach();
         mListener = null;
     }
-*/
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -152,7 +203,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnSearchConnetionFragmentInteractionListener {
         void onFragmentInteraction();
     }
 }

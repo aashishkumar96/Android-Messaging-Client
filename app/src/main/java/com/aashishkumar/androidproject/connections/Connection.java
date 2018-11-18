@@ -56,6 +56,11 @@ public class Connection implements Serializable {
             return this;
         }
 
+        public Builder addID(final String val) {
+            mMemID = val;
+            return this;
+        }
+
 
         public Connection build() {
             return new Connection(this);

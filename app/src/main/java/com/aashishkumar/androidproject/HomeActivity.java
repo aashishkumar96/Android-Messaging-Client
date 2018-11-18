@@ -136,6 +136,7 @@ public class HomeActivity extends AppCompatActivity
             loadFragment(new ConnectionOptionFragment());
         } else if (id == R.id.nav_weather) {
             loadFragment(new WeatherFragment());
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

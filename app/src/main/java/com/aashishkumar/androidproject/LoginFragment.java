@@ -64,7 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void attemptLogin(final View theButton) {
 
-        EditText emailEdit = getActivity().findViewById(R.id.emailText_login_fragment);
+        EditText emailEdit = getActivity().findViewById(R.id.EnterTheVerifcatioCode);
         EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
 
         boolean hasError = false;
@@ -143,7 +143,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 mListener.onLoginSuccess(mCredentials, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
-                ((TextView) getView().findViewById(R.id.emailText_login_fragment))
+                ((TextView) getView().findViewById(R.id.EnterTheVerifcatioCode))
                         .setError("Login Unsuccessful");
             }
 
@@ -155,7 +155,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     + e.getMessage());
 
             mListener.onWaitFragmentInteractionHide();
-            ((TextView) getView().findViewById(R.id.emailText_login_fragment))
+            ((TextView) getView().findViewById(R.id.EnterTheVerifcatioCode))
                     .setError("Login Unsuccessful");
         }
     }

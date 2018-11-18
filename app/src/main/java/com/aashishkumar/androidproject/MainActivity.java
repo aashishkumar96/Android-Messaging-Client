@@ -1,6 +1,7 @@
 package com.aashishkumar.androidproject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,8 @@ import com.aashishkumar.androidproject.model.Credentials;
 
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
-        RegisterFragment.OnRegisterFragmentInteractionListener {
+        RegisterFragment.OnRegisterFragmentInteractionListener,
+        VerificationCode.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRegisterSuccess(Credentials mCredentials) {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.Verify, new WaitFragment(), "WAIT")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -60,6 +66,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onWaitFragmentInteractionHide() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
+                .commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))

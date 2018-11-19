@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aashishkumar.androidproject.connections.Connection;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
@@ -113,7 +115,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleSearchOnPre() {
-        //mListener.onWaitFragmentInteractionShow();
+        onWaitFragmentInteractionShow();
     }
 
     /**
@@ -129,9 +131,11 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
             List<Connection> connections = new ArrayList<>();
 
             if (data.length() == 0) {
-                //Log.e("ERROR", "no connections");
-                //onWaitFragmentInteractionHide();
-                //loadFragment(new NoConnectionFragment());
+                Log.e("ERROR", "no connections found");
+                Toast.makeText(getActivity(), "Cannot find this connection!", Toast.LENGTH_SHORT).show();
+                ((TextView) getView().findViewById(R.id.text_search_searchFragment))
+                        .setError("Connection does not exist");
+                onWaitFragmentInteractionHide();
             } else {
 
                 for(int i = 0; i < data.length(); i++) {
@@ -150,7 +154,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
                 args.putSerializable(SearchResultFragment.ARG_SEARCH_LIST, connectionsArray);
                 Fragment frag = new SearchResultFragment();
                 frag.setArguments(args);
-                //onWaitFragmentInteractionHide();
+                onWaitFragmentInteractionHide();
                 loadFragment(frag);
             }
 
@@ -158,7 +162,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
             //notify user
-            //onWaitFragmentInteractionHide();
+            onWaitFragmentInteractionHide();
         }
 
     }
@@ -205,5 +209,20 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
      */
     public interface OnSearchConnetionFragmentInteractionListener {
         void onFragmentInteraction();
+    }
+
+    public void onWaitFragmentInteractionShow() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.activity_home, new WaitFragment(), "WAIT")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void onWaitFragmentInteractionHide() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .remove(getActivity().getSupportFragmentManager().findFragmentByTag("WAIT"))
+                .commit();
     }
 }

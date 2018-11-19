@@ -1,6 +1,8 @@
 package com.aashishkumar.androidproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.aashishkumar.androidproject.connections.Connection;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
@@ -113,11 +116,31 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            logout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        SharedPreferences prefs =
+                getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //remove the saved credentials from StoredPrefs
+        prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
+        prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
+
+        //close the app
+        finishAndRemoveTask();
+
+        //or close this activity and bring back the Login
+        //Intent i = new Intent(this, MainActivity.class);
+        //startActivity(i);
+        //End this Activity and remove it from the Activity back stack.
+        //finish();
     }
 
     private void loadFragment(Fragment frag) {
@@ -285,7 +308,10 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSearchListFragmentInteraction(Connection item) {
+        // Get the memberid of the connection that you've searched
+        // for later use (to add friend).
         mFriendID = item.getMemID();
+
         Bundle args = new Bundle();
         args.putString("username", item.getUsername());
         args.putString("fname", item.getFirstName());
@@ -334,6 +360,11 @@ public class HomeActivity extends AppCompatActivity
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Toast.makeText(this, "New connection is added", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error! New connection can't be added!", Toast.LENGTH_SHORT).show();
+            }
             onWaitFragmentInteractionHide();
 
         } catch (JSONException e) {
@@ -342,4 +373,6 @@ public class HomeActivity extends AppCompatActivity
             onWaitFragmentInteractionHide();
         }
     }
+
+
 }

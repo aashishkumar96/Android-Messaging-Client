@@ -1,6 +1,7 @@
 package com.aashishkumar.androidproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,6 @@ import org.json.JSONObject;
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private OnLoginFragmentInteractionListener mListener;
-    //private static EditText email, password;
     private Credentials mCredentials;
     private String mMemberID;
 
@@ -50,6 +50,31 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //retrieve the stored credentials from SharedPrefs
+        if (prefs.contains(getString(R.string.keys_prefs_email)) &&
+                prefs.contains(getString(R.string.keys_prefs_password))) {
+
+            final String email = prefs.getString(getString(R.string.keys_prefs_email), "");
+            final String password = prefs.getString(getString(R.string.keys_prefs_password), "");
+            //Load the two login EditTexts with the credentials found in SharedPrefs
+            EditText emailEdit = getActivity().findViewById(R.id.emailText_login_fragment);
+            emailEdit.setText(email);
+            EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
+            passwordEdit.setText(password);
+
+            doLogin(email,  password);
+        }
+    }
+
+
+    @Override
     public void onClick(View view) {
         if (mListener != null) {
             switch (view.getId()) {
@@ -62,6 +87,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Log user in
+     * @param theButton
+     */
     private void attemptLogin(final View theButton) {
 
         EditText emailEdit = getActivity().findViewById(R.id.emailText_login_fragment);
@@ -71,7 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (emailEdit.getText().length() == 0) {
             hasError = true;
             emailEdit.setError("Field must not be empty.");
-        }  else if (emailEdit.getText().toString().chars().filter(ch ->ch == '@').count() != 1) {
+        }  else if (isValidEmail(emailEdit.getText().toString())) {
             hasError = true;
             emailEdit.setError("Field must contain a valid email address.");
         }
@@ -81,32 +110,53 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!hasError) {
-            Credentials credentials = new Credentials.Builder(
-                    emailEdit.getText().toString(),
-                    passwordEdit.getText().toString())
-                    .build();
-
-            //build the web service URL
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .appendPath(getString(R.string.ep_base_url))
-                    .appendPath(getString(R.string.ep_login))
-                    .build();
-
-            //build the JSONObject
-            JSONObject msg = credentials.asJSONObject();
-
-            mCredentials = credentials;
-
-            //instantiate and execute the AsyncTask.
-            //Feel free to add a handler for onPreExecution so that a progress bar
-            //is displayed or maybe disable buttons.
-            new SendPostAsyncTask.Builder(uri.toString(), msg)
-                    .onPreExecute(this::handleLoginOnPre)
-                    .onPostExecute(this::handleLoginOnPost)
-                    .onCancelled(this::handleErrorsInTask)
-                    .build().execute();
+            String email = emailEdit.getText().toString();
+            String password = passwordEdit.getText().toString();
+            doLogin(email, password);
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        boolean result = false;
+        char[] array = email.toCharArray();
+        int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == '@') {
+                count++;
+            }
+        }
+        if (count == 1) result = true;
+        return result;
+    }
+
+
+    /**
+     * Helper method to login automatically
+     */
+    private void doLogin(String email, String password) {
+        Credentials credentials = new Credentials.Builder(
+                email, password).build();
+
+        //build the web service URL
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_login))
+                .build();
+
+        //build the JSONObject
+        JSONObject msg = credentials.asJSONObject();
+
+        mCredentials = credentials;
+
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::handleLoginOnPre)
+                .onPostExecute(this::handleLoginOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
     }
 
     /**
@@ -140,6 +190,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
+                saveCredentials(mCredentials);
                 mListener.onLoginSuccess(mCredentials, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
@@ -158,6 +209,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             ((TextView) getView().findViewById(R.id.emailText_login_fragment))
                     .setError("Login Unsuccessful");
         }
+    }
+
+    private void saveCredentials(final Credentials credentials) {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //Store the credentials in SharedPrefs
+        prefs.edit().putString(getString(R.string.keys_prefs_email), credentials.getEmail()).apply();
+        prefs.edit().putString(getString(R.string.keys_prefs_password), credentials.getPassword()).apply();
     }
 
     @Override
@@ -182,10 +243,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnLoginFragmentInteractionListener
              extends WaitFragment.OnFragmentInteractionListener {

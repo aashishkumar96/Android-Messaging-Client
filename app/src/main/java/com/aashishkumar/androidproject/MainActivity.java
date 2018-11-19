@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("email", mCredentials.getEmail());
         intent.putExtra("id", id);
         MainActivity.this.startActivity(intent);
+        finish();
     }
 
     @Override

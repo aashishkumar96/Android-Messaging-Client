@@ -100,9 +100,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (emailEdit.getText().length() == 0) {
             hasError = true;
             emailEdit.setError("Field must not be empty.");
-        }  else if (isValidEmail(emailEdit.getText().toString())) {
-            hasError = true;
-            emailEdit.setError("Field must contain a valid email address.");
+        //}  else if (isValidEmail(emailEdit.getText().toString())) {
+        //    hasError = true;
+        //    emailEdit.setError("Field must contain a valid email address.");
         }
         if (passwordEdit.getText().length() == 0) {
             hasError = true;
@@ -123,9 +123,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == '@') {
                 count++;
+                result = true;
+                break;
             }
         }
-        if (count == 1) result = true;
+        //if (count == 1) result = true;
         return result;
     }
 

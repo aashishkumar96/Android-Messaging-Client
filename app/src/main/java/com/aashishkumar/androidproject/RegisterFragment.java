@@ -87,9 +87,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         if (regEmail.getText().length() == 0) {
             hasError = true;
             regEmail.setError("Field must not be empty.");
-        }  else if (isValidEmail(regEmail.getText().toString())) {
-            hasError = true;
-            regEmail.setError("Field must contain a valid email address.");
+        //}  else if (isValidEmail(regEmail.getText().toString())) {
+        //    hasError = true;
+         //   regEmail.setError("Field must contain a valid email address.");
         }
 
         if (regPass.getText().length() == 0) {
@@ -147,7 +147,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         boolean result = false;
         char[] array = email.toCharArray();
         int count = 0;
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length ; i++) {
             if (array[i] == '@') {
                 count++;
             }

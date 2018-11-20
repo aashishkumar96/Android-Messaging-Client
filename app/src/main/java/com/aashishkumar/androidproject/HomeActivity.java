@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity
                    ConnectionFragment.OnConnectionFragmentInteractionListener,
                    NoConnectionFragment.OnNoConnectionFragmentInteractionListener,
                    ConnectionProfileFragment.OnConectionProfileFragmentInteractionListener,
+                   ConfirmProfileFragment.OnConfirmProfileFragmentInteractionListener,
                    SearchConnectionFragment.OnSearchConnetionFragmentInteractionListener,
                    SearchResultFragment.OnSearchListFragmentInteractionListener,
                    SearchProfileFragment.OnSearchProfileFragmentInteractionListener {
@@ -52,15 +53,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -279,16 +271,16 @@ public class HomeActivity extends AppCompatActivity
         args.putString("username", item.getUsername());
         args.putString("fname", item.getFirstName());
         args.putString("lname", item.getLastName());
-        ConnectionProfileFragment frag = new ConnectionProfileFragment();
-        frag.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.activity_home, frag)
-                .addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
+        int isVerified = item.getVerified();
+        if (isVerified == 0) {
+            ConfirmProfileFragment confirmProfileFragment = new ConfirmProfileFragment();
+            confirmProfileFragment.setArguments(args);
+            loadFragment(confirmProfileFragment);
+        } else {
+            ConnectionProfileFragment profileFragment = new ConnectionProfileFragment();
+            profileFragment.setArguments(args);
+            loadFragment(profileFragment);
+        }
     }
 
     @Override
@@ -298,7 +290,50 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onRemoveClicked() {
-        //Update later
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_connections))
+                .appendPath(getString(R.string.ep_removefriend))
+                .build();
+
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("id_self", mMemberID);
+            msg.put("id_friend", mFriendID);
+        } catch (JSONException e) {
+            Log.wtf("ERROR! ", e.getMessage());
+            onWaitFragmentInteractionHide();
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleRemoveFriendOnPostExecute)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+
+    }
+
+    private void handleRemoveFriendOnPostExecute(String result) {
+        try {
+
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Toast.makeText(this, "This connection is remove", Toast.LENGTH_SHORT).show();
+                loadFragment(new ConnectionOptionFragment());
+            } else {
+                Toast.makeText(this, "Error! This connection can't be removed!", Toast.LENGTH_SHORT).show();
+            }
+            onWaitFragmentInteractionHide();
+
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR!", e.getMessage());
+            //notify user
+            onWaitFragmentInteractionHide();
+        }
     }
 
     @Override
@@ -329,7 +364,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAddToListClicked() {
+    public void onSendRequestClicked() {
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -348,22 +383,22 @@ public class HomeActivity extends AppCompatActivity
 
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
-                .onPostExecute(this::handleAddFriendOnPostExecute)
+                .onPostExecute(this::handleSendRequestOnPostExecute)
                 .onCancelled(this::handleErrorInTask)
                 .build().execute();
 
     }
 
-    private void handleAddFriendOnPostExecute(String result) {
+    private void handleSendRequestOnPostExecute(String result) {
         try {
 
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
             if (success) {
-                Toast.makeText(this, "New connection is added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Successfully send friend request", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Error! New connection can't be added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error! Can't send friend request!", Toast.LENGTH_SHORT).show();
             }
             onWaitFragmentInteractionHide();
 
@@ -375,4 +410,58 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onConfirmClicked() {
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_connections))
+                .appendPath(getString(R.string.ep_confirmfriend))
+                .build();
+
+
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("id_self", mMemberID);
+            msg.put("id_friend", mFriendID);
+        } catch (JSONException e) {
+            Log.wtf("ERROR! Confirmfriend ", e.getMessage());
+            onWaitFragmentInteractionHide();
+        }
+
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleConfirmFriendOnPostExecute)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+
+    }
+
+    private void handleConfirmFriendOnPostExecute(String result) {
+        try {
+
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Toast.makeText(this, "This connection is confirmed", Toast.LENGTH_SHORT).show();
+                //loadFragment(new ConnectionOptionFragment());
+            } else {
+                Toast.makeText(this, "Error! This connection can't be confirmed!", Toast.LENGTH_SHORT).show();
+            }
+            onWaitFragmentInteractionHide();
+
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR!", e.getMessage());
+            //notify user
+            onWaitFragmentInteractionHide();
+        }
+    }
+
+
+    @Override
+    public void onDeclineClicked() {
+        onRemoveClicked();
+    }
 }

@@ -1,5 +1,6 @@
 package com.aashishkumar.androidproject;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import com.aashishkumar.androidproject.ConnectionFragment.OnConnectionFragmentInteractionListener;
 import com.aashishkumar.androidproject.connections.Connection;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,6 +25,12 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
 
     public MyConnectionRecyclerViewAdapter(List<Connection> items, OnConnectionFragmentInteractionListener listener) {
         mValues = items;
+        Collections.sort(mValues, new Comparator<Connection>() {
+            @Override
+            public int compare(Connection o1, Connection o2) {
+                return o2.getVerified() - o1.getVerified();
+            }
+        });
         mListener = listener;
     }
 
@@ -40,6 +49,7 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
 
         if (mValues.get(position).getVerified() == 0) {
             holder.mUsername.setText(mValues.get(position).getUsername() + " [UNVERIFIED]");
+            holder.mUsername.setTextColor(Color.GRAY);
         }
 
 
@@ -71,7 +81,6 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
             mView = view;
             mUsername = (TextView) view.findViewById(R.id.username_connection_frag);
             mFullName = (TextView) view.findViewById(R.id.fullname_connection_frag);
-            //mLastName
         }
 
         @Override

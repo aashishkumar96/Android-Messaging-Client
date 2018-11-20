@@ -22,13 +22,19 @@
     <string name="retype_password_text">Retype Password</string>
     <string name="button_start_chat">Start Chat</string>
     <string name="button_remove_friend">Remove Friend</string>
+    <string name="button_decline_friend">Decline Friend Request</string>
     <string name="button_search">Search</string>
     <string name="button_search_friend">Search Friend</string>
     <string name="button_add_friend">Add Friend</string>
+    <string name="button_request_friend">Send Friend Request</string>
+    <string name="button_confirm_friend">Confirm Friend Request</string>
     <string name="button_view_friends">Friends List</string>
     <string name="no_connection_text">You have no connections!</string>
     <string name="text_search">Search connection</string>
     <string name="action_logout">Logout</string>
+    <string name="verifyCode">Enter The Verification Code</string>
+    <string name="EnterCode">Enter The Verification Code</string>
+    <string name="VerifyButton">Verify</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_my_locations">MyLocationsActivity</string>

@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (emailEdit.getText().length() == 0) {
             hasError = true;
             emailEdit.setError("Field must not be empty.");
-        }  else if (isValidEmail(emailEdit.getText().toString())) {
+        }  else if (!isValidEmail(emailEdit.getText().toString())) {
             hasError = true;
             emailEdit.setError("Field must contain a valid email address.");
         }

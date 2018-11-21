@@ -40,11 +40,11 @@ public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySe
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mFullName.setText(mValues.get(position).getFullName());
 
-        if (mValues.get(position).getVerified() == 0) {
-            holder.mUsername.setTextColor(Color.GRAY);
-        } else {
-            holder.mUsername.setTextColor(Color.BLUE);
-        }
+//        if (mValues.get(position).getVerified() == 0) {
+//            holder.mUsername.setTextColor(Color.GRAY);
+//        } else {
+//            holder.mUsername.setTextColor(Color.BLUE);
+//        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

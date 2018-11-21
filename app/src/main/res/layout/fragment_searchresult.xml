@@ -36,7 +36,7 @@
                     android:id="@+id/username_searchresult_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
                 <TextView

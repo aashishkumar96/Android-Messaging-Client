@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private OnLoginFragmentInteractionListener mListener;
     private Credentials mCredentials;
     private String mMemberID;
+    private CheckBox mStayLoggedInCheck;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -45,6 +47,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         Button register = (Button) v.findViewById(R.id.registerBtn_login_fragment);
         register.setOnClickListener(view ->mListener.onRegisterClicked());
+
+        mStayLoggedInCheck = (CheckBox) v.findViewById(R.id.checkBox_login_fragment);
 
         return v;
     }
@@ -119,7 +123,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private boolean isValidEmail(String email) {
         boolean result = false;
         char[] array = email.toCharArray();
-        int count = 0;
         for (int i = 0; i < array.length; i++) {
             if (array[i] == '@') {
                 result = true;
@@ -190,7 +193,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                saveCredentials(mCredentials);
+                if (mStayLoggedInCheck.isChecked()) {
+                    saveCredentials(mCredentials);
+                }
+                //saveCredentials(mCredentials);
                 mListener.onLoginSuccess(mCredentials, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user

@@ -126,11 +126,11 @@ public class HomeActivity extends AppCompatActivity
         prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
 
         //close the app
-        finishAndRemoveTask();
+        //finishAndRemoveTask();
 
         //or close this activity and bring back the Login
-        //Intent i = new Intent(this, MainActivity.class);
-        //startActivity(i);
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
         //End this Activity and remove it from the Activity back stack.
         //finish();
     }
@@ -217,6 +217,7 @@ public class HomeActivity extends AppCompatActivity
                         .addFirstName(jsonConnection.getString("firstname"))
                         .addLastName(jsonConnection.getString("lastname"))
                         .addVerified(jsonConnection.getInt("verified"))
+                        .addID(jsonConnection.getString("memberid"))
                         .build());
                 }
 
@@ -268,6 +269,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onConnectionListFragmentInteraction(Connection item) {
         Bundle args = new Bundle();
+        mFriendID = item.getMemID();
         args.putString("username", item.getUsername());
         args.putString("fname", item.getFirstName());
         args.putString("lname", item.getLastName());
@@ -297,6 +299,7 @@ public class HomeActivity extends AppCompatActivity
                 .appendPath(getString(R.string.ep_removefriend))
                 .build();
 
+
         JSONObject msg = new JSONObject();
 
         try {
@@ -322,7 +325,7 @@ public class HomeActivity extends AppCompatActivity
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
             if (success) {
-                Toast.makeText(this, "This connection is remove", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "This connection is removed", Toast.LENGTH_SHORT).show();
                 loadFragment(new ConnectionOptionFragment());
             } else {
                 Toast.makeText(this, "Error! This connection can't be removed!", Toast.LENGTH_SHORT).show();

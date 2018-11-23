@@ -9,17 +9,17 @@
 
 
     <ImageView
-        android:id="@+id/image_icon_profile_frag"
+        android:id="@+id/image_icon_confirmprofile_frag"
         android:layout_width="136dp"
         android:layout_height="136dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/ic_connections"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/username_text_profile_frag"
+        android:id="@+id/username_text_confirmprofile_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_icon_profile_frag" />
+        app:layout_constraintTop_toBottomOf="@+id/image_icon_confirmprofile_frag" />
 
     <TextView
         android:id="@+id/fname"
@@ -43,10 +43,10 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_text_profile_frag" />
+        app:layout_constraintTop_toBottomOf="@+id/username_text_confirmprofile_frag" />
 
     <TextView
-        android:id="@+id/fname_text_profile_frag"
+        android:id="@+id/fname_text_confirmprofile_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/fname"
-        app:layout_constraintTop_toBottomOf="@+id/username_text_profile_frag" />
+        app:layout_constraintTop_toBottomOf="@+id/username_text_confirmprofile_frag" />
 
     <TextView
         android:id="@+id/lname"
@@ -74,32 +74,32 @@
         app:layout_constraintTop_toBottomOf="@+id/fname" />
 
     <TextView
-        android:id="@+id/lname_text_profile_frag"
+        android:id="@+id/lname_text_confirmprofile_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="36dp"
         android:text="TextView"
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/button_chat_profile_frag"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.007"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/lname"
-        app:layout_constraintTop_toBottomOf="@+id/fname_text_profile_frag"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/fname_text_confirmprofile_frag"
+        app:layout_constraintVertical_bias="0.727" />
 
     <Button
-        android:id="@+id/button_chat_profile_frag"
+        android:id="@+id/button_confirm_confirmprofile_frag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/button_start_chat"
+        android:text="@string/button_confirm_friend"
         android:textColor="@android:color/holo_green_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -107,20 +107,20 @@
         app:layout_constraintTop_toBottomOf="@+id/lname" />
 
     <Button
-        android:id="@+id/button_remove_profile_frag"
+        android:id="@+id/button_decline_confirmprofile_frag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/button_remove_friend"
+        android:text="@string/button_decline_friend"
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_chat_profile_frag"
+        app:layout_constraintTop_toBottomOf="@+id/button_confirm_confirmprofile_frag"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

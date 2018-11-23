@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_add_searchprofile_frag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fname_text_searchprofile_frag"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.347" />
 
     <Button
         android:id="@+id/button_add_searchprofile_frag"
@@ -99,7 +99,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/button_add_friend"
+        android:text="@string/button_request_friend"
         android:textColor="@android:color/holo_green_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

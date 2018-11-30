@@ -1,5 +1,6 @@
 package com.aashishkumar.androidproject;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,12 @@ public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySe
         holder.mItem = mValues.get(position);
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mFullName.setText(mValues.get(position).getFullName());
+
+//        if (mValues.get(position).getVerified() == 0) {
+//            holder.mUsername.setTextColor(Color.GRAY);
+//        } else {
+//            holder.mUsername.setTextColor(Color.BLUE);
+//        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

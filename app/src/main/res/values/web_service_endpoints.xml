@@ -7,5 +7,8 @@
     <string name="ep_viewfriends">viewfriends</string>
     <string name="ep_addfriend">addfriend</string>
     <string name="ep_confirmfriend">confirmfriend</string>
+    <string name="ep_removefriend">removefriend</string>
+
+
 
 </resources>

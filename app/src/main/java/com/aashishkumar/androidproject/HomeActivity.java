@@ -47,8 +47,8 @@ public class HomeActivity extends AppCompatActivity
                    SearchProfileFragment.OnSearchProfileFragmentInteractionListener {
 
     private HomeFragment mHomeFragment;
-    private String mMemberID;
-    private String mFriendID;
+    private int mMemberID;
+    private int mFriendID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity
             // Get the email used to login
             Intent intent = getIntent();
             String emailAdd = intent.getStringExtra("email");
-            mMemberID = intent.getStringExtra("id");
+            mMemberID = intent.getIntExtra("id", 0);
             Bundle args = new Bundle();
             args.putString("emailAdd", emailAdd);
             mHomeFragment.setArguments(args);
@@ -214,7 +214,7 @@ public class HomeActivity extends AppCompatActivity
                         .addFirstName(jsonConnection.getString("firstname"))
                         .addLastName(jsonConnection.getString("lastname"))
                         .addVerified(jsonConnection.getInt("verified"))
-                        .addID(jsonConnection.getString("memberid"))
+                        .addID(jsonConnection.getInt("memberid"))
                         .build());
                 }
 

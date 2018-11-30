@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoginSuccess(Credentials mCredentials, String id) {
+    public void onLoginSuccess(Credentials mCredentials, int id) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         intent.putExtra("email", mCredentials.getEmail());
         intent.putExtra("id", id);

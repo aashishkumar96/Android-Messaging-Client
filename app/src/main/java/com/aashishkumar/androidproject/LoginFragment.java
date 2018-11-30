@@ -30,7 +30,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private OnLoginFragmentInteractionListener mListener;
     private Credentials mCredentials;
-    private String mMemberID;
+    private int mMemberID;
     private String mFirebaseToken;
     private CheckBox mStayLoggedInCheck;
 
@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
             passwordEdit.setText(password);
 
-            doLogin(email,  password);
+            getFirebaseToken(email,  password);
         }
     }
 
@@ -222,8 +222,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
+            Log.d("DEBUG", "" + resultsJSON);
             boolean success = resultsJSON.getBoolean("success");
-            mMemberID = resultsJSON.getString("memberid");
+            mMemberID = resultsJSON.getInt("memberid");
+
 
             mListener.onWaitFragmentInteractionHide();
             if (success) {
@@ -287,7 +289,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public interface OnLoginFragmentInteractionListener
              extends WaitFragment.OnFragmentInteractionListener {
-        void onLoginSuccess(Credentials mCredentials, String id);
+        void onLoginSuccess(Credentials mCredentials, int id);
         void onRegisterClicked();
     }
 }

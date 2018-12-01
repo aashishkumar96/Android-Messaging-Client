@@ -151,7 +151,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_connections) {
             loadFragment(new ConnectionOptionFragment());
         } else if (id == R.id.nav_weather) {
-            loadFragment(new WeatherFragment());
+            loadFragment(new WeatherforecastFragment());
 
         }
 

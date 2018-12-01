@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,10 +35,13 @@ public class WeatherFragment extends Fragment {
 
 
     TextView selectCity, cityField, detailsField, currentTemperatureField, humidity_field, weatherIcon, updatedField;
+
     ProgressBar loader;
     Typeface weatherFont;
-    String city = "Seattle, US";
-    String OPEN_WEATHER_MAP_API = "13ffcb74175923827cd24f98a48763a9";
+    String location = "Tacoma, US";
+    String city, country;
+    String OPEN_WEATHER_MAP_API = "13ffcb74175923827cd24f98a48763a9"; // 58b43eca9e254f02a1f7b75ee9525838
+    MyLocationsActivity myLocationsActivity;
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -64,14 +68,21 @@ public class WeatherFragment extends Fragment {
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons-regular-webfont.ttf");
         weatherIcon.setTypeface(weatherFont);
 
-        taskLoadUp(city);
+        WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
+        task.execute(location);
+
+//        city = myLocationsActivity.getCity();
+//        city = city.concat(", ");
+//        country = myLocationsActivity.getCountry();
+//        location = city.concat(country);
+
         selectCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
                 alertDialog.setTitle("Change City");
                 final EditText input = new EditText(v.getContext());
-                input.setText(city);
+                input.setText(location);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
@@ -81,8 +92,9 @@ public class WeatherFragment extends Fragment {
                 alertDialog.setPositiveButton("Change",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                city = input.getText().toString();
-                                taskLoadUp(city);
+                                location = input.getText().toString();
+                                WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
+                                task.execute(location);
                             }
                         });
                 alertDialog.setNegativeButton("Cancel",
@@ -98,14 +110,6 @@ public class WeatherFragment extends Fragment {
         return v;
     }
 
-    public void taskLoadUp(String query) {
-        if (Weather_Content.isNetworkAvailable(getActivity().getApplicationContext())) {
-            WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
-            task.execute(query);
-        } else {
-            Toast.makeText(getActivity().getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-        }
-    }
 
 
     class DownloadWeather extends AsyncTask<String, Void, String> {
@@ -117,8 +121,8 @@ public class WeatherFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            String xml = Weather_Content.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + args[0] +
-                    "&units=metric&appid=" + OPEN_WEATHER_MAP_API);
+            String xml = Weather_Content.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + location +
+                    "&units=imperial&appid=" + OPEN_WEATHER_MAP_API);
             return xml;
         }
 
@@ -137,6 +141,7 @@ public class WeatherFragment extends Fragment {
                     currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
                     humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
                     updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
+
                     weatherIcon.setText(Html.fromHtml(Weather_Content.setWeatherIcon(details.getInt("id"),
                             json.getJSONObject("sys").getLong("sunrise") * 1000,
                             json.getJSONObject("sys").getLong("sunset") * 1000)));

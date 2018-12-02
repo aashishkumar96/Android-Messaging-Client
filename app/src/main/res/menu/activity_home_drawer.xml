@@ -17,6 +17,11 @@
             android:icon="@drawable/ic_weather"
             android:title="@string/nav_drawer_weather" />
 
+        <item
+            android:id="@+id/nav_forecastweather"
+            android:icon="@drawable/ic_weather"
+            android:title="@string/nav_drawer_forecastweather" />
+
     </group>
 
 

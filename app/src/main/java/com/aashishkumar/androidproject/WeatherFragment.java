@@ -6,9 +6,11 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +51,7 @@ public class WeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v= inflater.inflate(R.layout.fragment_weather, container, false);
+        View v = inflater.inflate(R.layout.fragment_weather, container, false);
         loader = v.findViewById(R.id.loader);
         selectCity = v.findViewById(R.id.selectCity);
         cityField = v.findViewById(R.id.city_field);
@@ -103,6 +105,10 @@ public class WeatherFragment extends Fragment {
 
 
 
+
+
+
+
     class DownloadWeather extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -133,7 +139,8 @@ public class WeatherFragment extends Fragment {
                     int imageResource = getResources().getIdentifier(("@drawable/"+iconId),null, getActivity().getPackageName());
                     imageView.setImageResource(imageResource);
 
-                    cityField.setText(day.getString("city_name").toUpperCase(Locale.US) + ", " + day.getString("country_code"));
+                    location = (day.getString("city_name").toUpperCase(Locale.US) + ", " + day.getString("country_code"));
+                    cityField.setText(location);
 
 
                     detailsField.setText(weather.getString("description").toUpperCase(Locale.US));
@@ -155,6 +162,8 @@ public class WeatherFragment extends Fragment {
 
 
     }
+
+
 
 
 

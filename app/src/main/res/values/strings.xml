@@ -11,6 +11,7 @@
     <string name="nav_drawer_connections">Connections</string>
     <string name="nav_drawer_weather">Weather</string>
     <string name="nav_drawer_home">Home</string>
+    <string name="nav_drawer_forecastweather">10DaysWeatherForecast</string>
     <string name="all_register">REGISTER</string>
     <string name="all_signin">SIGN IN</string>
     <string name="all_login">LOG IN</string>
@@ -41,6 +42,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_my_locations">MyLocationsActivity</string>
     <string name="title_activity_weather">Weather</string>
+
 
 
 </resources>

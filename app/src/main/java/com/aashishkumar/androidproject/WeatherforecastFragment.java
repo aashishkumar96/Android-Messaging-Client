@@ -30,7 +30,7 @@ import java.util.Locale;
 public class WeatherforecastFragment extends Fragment {
 
 
-    TextView selectCity, cityField, detailsField1, maxTemp1, minTemp1, updateDate1,
+    TextView cityField, detailsField1, maxTemp1, minTemp1, updateDate1,
             detailsField2, maxTemp2, minTemp2, updateDate2,
             detailsField3, maxTemp3, minTemp3, updateDate3,
             detailsField4, maxTemp4, minTemp4, updateDate4,
@@ -45,7 +45,7 @@ public class WeatherforecastFragment extends Fragment {
     ImageView imageView1, imageView2, imageView3, imageView4, imageView5,
             imageView6, imageView7, imageView8, imageView9, imageView10;
 
-    String location = "Tacoma";
+    String location = "Tacoma, US";
     //    String city, country;
     String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838"; //
     MyLocationsActivity myLocationsActivity;
@@ -64,13 +64,10 @@ public class WeatherforecastFragment extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_weatherforecast, container, false);
 
-        selectCity = v.findViewById(R.id.selectCity);
         cityField = v.findViewById(R.id.city_field1);
 
-
-
-
         cityField.setText(location);
+
 
         updateDate1 = v.findViewById(R.id.updated_field1);
         detailsField1 = v.findViewById(R.id.details_field1);
@@ -136,8 +133,6 @@ public class WeatherforecastFragment extends Fragment {
 
 
 
-
-
         WeatherforecastFragment.DownloadWeather task = new WeatherforecastFragment.DownloadWeather();
         task.execute(location);
 
@@ -155,7 +150,8 @@ public class WeatherforecastFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/forecast/daily?city=Tacoma&units=imperial&key=" + WEATHER_MAP_API);
+            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/forecast/daily?city=" + location +
+                    "&units=imperial&key=" + WEATHER_MAP_API);
             return xml;
         }
 
@@ -177,7 +173,7 @@ public class WeatherforecastFragment extends Fragment {
                     imageResource1 = getResources().getIdentifier(("@drawable/"+iconId1),null, getActivity().getPackageName());
                     imageView1.setImageResource(imageResource1);
                     maxTemp1.setText("Max "+String.format("%.2f", day1.getDouble("max_temp")) + "°");
-                    minTemp1.setText("Min" +String.format("%.2f", day1.getDouble("min_temp")) + "°");
+                    minTemp1.setText("Min " +String.format("%.2f", day1.getDouble("min_temp")) + "°");
                     detailsField1.setText(weather1.getString("description").toUpperCase(Locale.US));
 
 
@@ -189,7 +185,7 @@ public class WeatherforecastFragment extends Fragment {
                     imageResource2 = getResources().getIdentifier(("@drawable/"+iconId2),null, getActivity().getPackageName());
                     imageView2.setImageResource(imageResource2);
                     maxTemp2.setText("Max "+String.format("%.2f", day2.getDouble("max_temp")) + "°");
-                    minTemp2.setText("Min" +String.format("%.2f", day2.getDouble("min_temp")) + "°");
+                    minTemp2.setText("Min " +String.format("%.2f", day2.getDouble("min_temp")) + "°");
                     detailsField2.setText(weather2.getString("description").toUpperCase(Locale.US));
 
                     JSONObject day3 = json.getJSONArray("data").getJSONObject(2);
@@ -211,7 +207,7 @@ public class WeatherforecastFragment extends Fragment {
                     imageResource4 = getResources().getIdentifier(("@drawable/"+iconId4),null, getActivity().getPackageName());
                     imageView4.setImageResource(imageResource4);
                     maxTemp4.setText("Max "+String.format("%.2f", day4.getDouble("max_temp")) + "°");
-                    minTemp4.setText("Min" +String.format("%.2f", day4.getDouble("min_temp")) + "°");
+                    minTemp4.setText("Min " +String.format("%.2f", day4.getDouble("min_temp")) + "°");
                     detailsField4.setText(weather4.getString("description").toUpperCase(Locale.US));
 
                     JSONObject day5 = json.getJSONArray("data").getJSONObject(4);

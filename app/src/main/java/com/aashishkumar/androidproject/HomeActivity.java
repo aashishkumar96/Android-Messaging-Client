@@ -147,7 +147,7 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_home) {
-            loadFragment(mHomeFragment);
+            loadFragment(new WeatherFragment());
         } else if (id == R.id.nav_connections) {
             loadFragment(new ConnectionOptionFragment());
         } else if (id == R.id.nav_weather) {

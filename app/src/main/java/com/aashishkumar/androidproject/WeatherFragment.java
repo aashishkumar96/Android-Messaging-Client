@@ -1,15 +1,11 @@
 package com.aashishkumar.androidproject;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +19,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 
@@ -34,13 +28,12 @@ import java.util.Locale;
 public class WeatherFragment extends Fragment {
 
 
-    TextView selectCity, cityField, detailsField, currentTemperatureField, humidity_field, weatherIcon, updatedField;
-
+    TextView selectCity, cityField, detailsField, currentTemperatureField, pressure_field, updatedField;
+    ImageView imageView;
     ProgressBar loader;
-    Typeface weatherFont;
-    String location = "Tacoma, US";
+    String location = "Tacoma";
     String city, country;
-    String OPEN_WEATHER_MAP_API = "13ffcb74175923827cd24f98a48763a9"; // 58b43eca9e254f02a1f7b75ee9525838
+    String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838";
     MyLocationsActivity myLocationsActivity;
 
     public WeatherFragment() {
@@ -63,10 +56,8 @@ public class WeatherFragment extends Fragment {
         updatedField = v.findViewById(R.id.updated_field);
         detailsField = v.findViewById(R.id.details_field);
         currentTemperatureField = v.findViewById(R.id.current_temperature_field);
-        humidity_field = v.findViewById(R.id.humidity_field);
-        weatherIcon = v.findViewById(R.id.weather_icon);
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons-regular-webfont.ttf");
-        weatherIcon.setTypeface(weatherFont);
+        pressure_field = v.findViewById(R.id.pressure_field);
+        imageView = v.findViewById(R.id.image1View);
 
         WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
         task.execute(location);
@@ -121,8 +112,8 @@ public class WeatherFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            String xml = Weather_Content.excuteGet("http://api.openweathermap.org/data/2.5/weather?q=" + location +
-                    "&units=imperial&appid=" + OPEN_WEATHER_MAP_API);
+            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/current?city=" + location +
+                    "&units=imperial&key=" + WEATHER_MAP_API);
             return xml;
         }
 
@@ -132,19 +123,25 @@ public class WeatherFragment extends Fragment {
             try {
                 JSONObject json = new JSONObject(xml);
                 if(json != null) {
-                    JSONObject details = json.getJSONArray("weather").getJSONObject(0);
-                    JSONObject main = json.getJSONObject("main");
-                    DateFormat df = DateFormat.getDateTimeInstance();
+                    String iconId;
+                    JSONObject day = json.getJSONArray("data").getJSONObject(0);
+                    JSONObject weather = day.getJSONObject("weather");
 
-                    cityField.setText(json.getString("name").toUpperCase(Locale.US) + ", " + json.getJSONObject("sys").getString("country"));
-                    detailsField.setText(details.getString("description").toUpperCase(Locale.US));
-                    currentTemperatureField.setText(String.format("%.2f", main.getDouble("temp")) + "°");
-                    humidity_field.setText("Humidity: " + main.getString("humidity") + "%");
-                    updatedField.setText(df.format(new Date(json.getLong("dt") * 1000)));
 
-                    weatherIcon.setText(Html.fromHtml(Weather_Content.setWeatherIcon(details.getInt("id"),
-                            json.getJSONObject("sys").getLong("sunrise") * 1000,
-                            json.getJSONObject("sys").getLong("sunset") * 1000)));
+                    iconId = weather.getString("icon");
+                    updatedField.setText(day.getString("ob_time"));
+                    int imageResource = getResources().getIdentifier(("@drawable/"+iconId),null, getActivity().getPackageName());
+                    imageView.setImageResource(imageResource);
+
+                    cityField.setText(day.getString("city_name").toUpperCase(Locale.US) + ", " + day.getString("country_code"));
+
+
+                    detailsField.setText(weather.getString("description").toUpperCase(Locale.US));
+                    currentTemperatureField.setText(String.format("%.2f", day.getDouble("temp")) + "°");
+                    pressure_field.setText("Pressure: " + day.getDouble("pres") );
+
+
+
 
                     loader.setVisibility(View.GONE);
 

@@ -11,6 +11,7 @@
     <string name="nav_drawer_connections">Connections</string>
     <string name="nav_drawer_weather">Weather</string>
     <string name="nav_drawer_home">Home</string>
+    <string name="nav_drawer_chats">Chat List</string>
     <string name="all_register">REGISTER</string>
     <string name="all_signin">SIGN IN</string>
     <string name="all_login">LOG IN</string>
@@ -21,7 +22,8 @@
     <string name="lname_text">Last name</string>
     <string name="password_text">Password</string>
     <string name="retype_password_text">Retype Password</string>
-    <string name="button_start_chat">Start Chat</string>
+    <string name="button_start_new_chat">Start New Chat</string>
+    <string name="button_view_chat_list">View Chat List</string>
     <string name="button_remove_friend">Remove Friend</string>
     <string name="button_decline_friend">Decline Friend Request</string>
     <string name="button_search">Search</string>
@@ -33,10 +35,10 @@
     <string name="no_connection_text">You have no connections!</string>
     <string name="text_search">Search connection</string>
     <string name="action_logout">Logout</string>
-    <string name="ep_with_token">with_token</string>
     <string name="verifyCode">Enter The Verification Code</string>
     <string name="EnterCode">Enter The Verification Code</string>
     <string name="VerifyButton">Verify</string>
+    <string name="chat_message_hint">Enter a message</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_my_locations">MyLocationsActivity</string>

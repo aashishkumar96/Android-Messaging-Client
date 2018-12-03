@@ -33,9 +33,9 @@ public class HomeFragment extends Fragment {
 
         // Display the email/username used to login
         if (getArguments() != null) {
-            String emailAdd = getArguments().getString("emailAdd");
+            String username = getArguments().getString("username");
             TextView tv = getActivity().findViewById(R.id.textViewEmail);
-            tv.setText(emailAdd);
+            tv.setText(username);
         }
     }
 

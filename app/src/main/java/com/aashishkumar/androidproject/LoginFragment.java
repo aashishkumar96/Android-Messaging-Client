@@ -30,7 +30,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private OnLoginFragmentInteractionListener mListener;
     private Credentials mCredentials;
-    private int mMemberID;
+    private String mMemberID;
+    private String mUsername;
     private String mFirebaseToken;
     private CheckBox mStayLoggedInCheck;
 
@@ -77,7 +78,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
             passwordEdit.setText(password);
 
-            getFirebaseToken(email,  password);
+            //doLogin(email,  password);
+            getFirebaseToken(email, password);
         }
     }
 
@@ -222,11 +224,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
-            Log.d("DEBUG", "" + resultsJSON);
             boolean success = resultsJSON.getBoolean("success");
-            mMemberID = resultsJSON.getInt("memberid");
+            int id = resultsJSON.getInt("memberid");
+            mMemberID = Integer.toString(id);
+            mUsername = resultsJSON.getString("username");
 
-
+            //Log.e("username ", mUsername);
+            //Log.e("userid ", mMemberID);
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
@@ -234,7 +238,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     saveCredentials(mCredentials);
                 }
                 //saveCredentials(mCredentials);
-                mListener.onLoginSuccess(mCredentials, mMemberID);
+                mListener.onLoginSuccess(mCredentials, mUsername, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.emailText_login_fragment))
@@ -264,6 +268,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         prefs.edit().putString(getString(R.string.keys_prefs_password), credentials.getPassword()).apply();
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -288,8 +293,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * activity.
      */
     public interface OnLoginFragmentInteractionListener
-             extends WaitFragment.OnFragmentInteractionListener {
-        void onLoginSuccess(Credentials mCredentials, int id);
+            extends WaitFragment.OnFragmentInteractionListener {
+        void onLoginSuccess(Credentials mCredentials, String username, String id);
         void onRegisterClicked();
     }
 }

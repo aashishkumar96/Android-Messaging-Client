@@ -13,11 +13,13 @@
             android:icon="@drawable/ic_connections"
             android:title="@string/nav_drawer_connections" />
         <item
+            android:id="@+id/nav_chats"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/nav_drawer_chats" />
+        <item
             android:id="@+id/nav_weather"
             android:icon="@drawable/ic_weather"
             android:title="@string/nav_drawer_weather" />
-
     </group>
-
 
 </menu>

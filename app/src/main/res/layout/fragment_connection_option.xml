@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConnectionOptionFragment">
+    tools:context=".connections.ConnectionOptionFragment">
 
     <Button
         android:id="@+id/button_search_connectOptionFrag"

@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.connections;
 
 
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.aashishkumar.androidproject.R;
 
 
 /**

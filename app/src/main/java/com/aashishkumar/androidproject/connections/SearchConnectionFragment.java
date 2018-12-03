@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.connections;
 
 import android.content.Context;
 import android.net.Uri;
@@ -14,7 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.WaitFragment;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
 import org.json.JSONArray;
@@ -175,9 +176,6 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
         // Commit the transaction
         transaction.commit();
     }
-
-
-
 
     @Override
     public void onAttach(Context context) {

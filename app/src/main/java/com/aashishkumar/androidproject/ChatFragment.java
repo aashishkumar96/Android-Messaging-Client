@@ -10,8 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.chats.Chat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,27 +21,27 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnConnectionFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnChatListFragmentInteractionListener}
  * interface.
  */
-public class ConnectionFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    public static final String ARG_CONNECTION_LIST = "connection lists";
-    private List<Connection> mConnections;
+    public static final String ARG_CHAT_LIST = "chat lists";
+    private List<Chat> mChats;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnConnectionFragmentInteractionListener mListener;
+    private OnChatListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ConnectionFragment() {
+    public ChatFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static ConnectionFragment newInstance(int columnCount) {
-        ConnectionFragment fragment = new ConnectionFragment();
+    public static ChatFragment newInstance(int columnCount) {
+        ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -52,18 +53,21 @@ public class ConnectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mConnections = new ArrayList<Connection>(
-                    Arrays.asList((Connection[]) getArguments()
-                            .getSerializable(ARG_CONNECTION_LIST)));
+            //mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mChats = new ArrayList<Chat>(
+                    Arrays.asList((Chat[]) getArguments()
+                            .getSerializable(ARG_CHAT_LIST)));
         } else {
-            Log.e("ERROR!", "no connection list");
+            Log.e("ERROR!", "no chat list");
+            Toast.makeText(this.getActivity(), "Error! There are no chat rooms!", Toast.LENGTH_SHORT).show();
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_connection_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -74,20 +78,21 @@ public class ConnectionFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyConnectionRecyclerViewAdapter(mConnections, mListener));
+            //recyclerView.setAdapter(new MyChatRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyChatRecyclerViewAdapter(mChats, mListener));
+
         }
         return view;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnConnectionFragmentInteractionListener) {
-            mListener = (OnConnectionFragmentInteractionListener) context;
+        if (context instanceof OnChatListFragmentInteractionListener) {
+            mListener = (OnChatListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnConnectionFragmentInteractionListener");
+                    + " must implement OnChatListFragmentInteractionListener");
         }
     }
 
@@ -96,8 +101,6 @@ public class ConnectionFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -109,7 +112,7 @@ public class ConnectionFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnConnectionFragmentInteractionListener {
-        void onConnectionListFragmentInteraction(Connection item);
+    public interface OnChatListFragmentInteractionListener {
+        void onChatListFragmentInteraction(Chat item);
     }
 }

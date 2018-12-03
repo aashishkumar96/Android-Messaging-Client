@@ -46,7 +46,7 @@ public class WeatherforecastFragment extends Fragment {
     ImageView imageView1, imageView2, imageView3, imageView4, imageView5,
             imageView6, imageView7, imageView8, imageView9, imageView10;
 
-    String location = "Tacoma, US";
+    String location= "Tacoma, US";
 
     String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838"; //
 
@@ -66,6 +66,7 @@ public class WeatherforecastFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_weatherforecast, container, false);
 
         cityField = v.findViewById(R.id.city_field1);
+
 //
 //        if(getArguments().getString("Place") == null) {
 //            location = "Tacoma";

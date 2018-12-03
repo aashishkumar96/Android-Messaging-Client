@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aashishkumar.androidproject.models.Credentials;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,6 +77,10 @@ public class WeatherFragment extends Fragment {
         imageView = v.findViewById(R.id.image1View);
 
 
+        Button b = (Button) v.findViewById(R.id.button_forecast);
+        b.setOnClickListener(view -> loadFragment(new WeatherforecastFragment()));
+
+
 
 
         Geocoder geocoder;
@@ -122,10 +128,10 @@ public class WeatherFragment extends Fragment {
 
 
 
-        WeatherFragment fragment = new WeatherFragment();
-        Bundle args = new Bundle();
-        args.putString("Place", location);
-        fragment.setArguments(args);
+//        WeatherFragment fragment = new WeatherFragment();
+//        Bundle args = new Bundle();
+//        args.putString("Place", cityName);
+//        fragment.setArguments(args);
 
 
         WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
@@ -158,10 +164,10 @@ public class WeatherFragment extends Fragment {
                                 location = input.getText().toString();
                                 WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
                                 task.execute(location);
-                                WeatherFragment fragment = new WeatherFragment();
-                                Bundle args = new Bundle();
-                                args.putString("Place", location);
-                                fragment.setArguments(args);
+//                                WeatherFragment fragment = new WeatherFragment();
+//                                Bundle args = new Bundle();
+//                                args.putString("Place", cityName);
+//                                fragment.setArguments(args);
                             }
                         });
                 alertDialog.setNegativeButton("Cancel",
@@ -179,7 +185,14 @@ public class WeatherFragment extends Fragment {
 
 
 
-
+    private void loadFragment(Fragment frag) {
+        FragmentTransaction transaction =
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.activity_home, frag)
+                        .addToBackStack(null);
+        transaction.commit();
+    }
 
 
 

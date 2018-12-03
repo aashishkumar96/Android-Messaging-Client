@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             final String email = prefs.getString(getString(R.string.keys_prefs_email), "");
             final String password = prefs.getString(getString(R.string.keys_prefs_password), "");
             //Load the two login EditTexts with the credentials found in SharedPrefs
-            EditText emailEdit = getActivity().findViewById(R.id.emailText_login_fragment);
+            EditText emailEdit = getActivity().findViewById(R.id.enter_verification_code_fragment);
             emailEdit.setText(email);
             EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
             passwordEdit.setText(password);
@@ -97,7 +97,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     private void attemptLogin(final View theButton) {
 
-        EditText emailEdit = getActivity().findViewById(R.id.emailText_login_fragment);
+        EditText emailEdit = getActivity().findViewById(R.id.enter_verification_code_fragment);
         EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
 
         boolean hasError = false;
@@ -200,7 +200,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 mListener.onLoginSuccess(mCredentials, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
-                ((TextView) getView().findViewById(R.id.emailText_login_fragment))
+                ((TextView) getView().findViewById(R.id.enter_verification_code_fragment))
                         .setError("Login Unsuccessful");
             }
 
@@ -212,7 +212,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     + e.getMessage());
 
             mListener.onWaitFragmentInteractionHide();
-            ((TextView) getView().findViewById(R.id.emailText_login_fragment))
+            ((TextView) getView().findViewById(R.id.enter_verification_code_fragment))
                     .setError("Login Unsuccessful");
         }
     }

@@ -26,6 +26,8 @@ public class Credentials implements Serializable {
     private String mLastName;
     private String mEmail;
 
+    private String mCode;
+
     /**
      * Helper class for building Credentials.
      *
@@ -40,6 +42,9 @@ public class Credentials implements Serializable {
         private String mLastName = "";
         private String mUsername = "";
 
+        private String mCode = "";
+
+
 
         /**
          * Constructs a new Builder.
@@ -53,9 +58,20 @@ public class Credentials implements Serializable {
         public Builder(String email, String password) {
             mEmail = email;
             mPassword = password;
+
+        }
+
+        public  Builder(String email, String password, String code) {
+            mEmail = email;
+            mPassword = password;
+            mCode = code;
         }
 
 
+        public Builder addCode(final String val) {
+            mCode = val;
+            return this;
+        }
         /**
          * Add an optional first name.
          * @param val an optional first name
@@ -102,8 +118,12 @@ public class Credentials implements Serializable {
         mFirstName = builder.mFirstName;
         mLastName = builder.mLastName;
         mEmail = builder.mEmail;
+        mCode = builder.mCode;
     }
 
+
+
+    public String getCode() { return mCode; }
     /**
      * Get the Username.
      * @return the username

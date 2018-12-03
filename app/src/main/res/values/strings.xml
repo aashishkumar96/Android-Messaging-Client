@@ -34,12 +34,13 @@
     <string name="text_search">Search connection</string>
     <string name="action_logout">Logout</string>
     <string name="verifyCode">Enter The Verification Code</string>
-    <string name="EnterCode">Enter The Verification Code</string>
+    <string name="EnterCode">Verification Code</string>
     <string name="VerifyButton">Verify</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_my_locations">MyLocationsActivity</string>
     <string name="title_activity_weather">Weather</string>
+    <string name="Resend_Button">Resend</string>
 
 
 </resources>

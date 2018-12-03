@@ -1,6 +1,7 @@
 package com.aashishkumar.androidproject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,8 @@ import com.aashishkumar.androidproject.model.Credentials;
 
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
-        RegisterFragment.OnRegisterFragmentInteractionListener {
+        RegisterFragment.OnRegisterFragmentInteractionListener,
+        Verification.OnVerificationFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+
+
     @Override
     public void onRegisterClicked() {
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -46,8 +50,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRegisterSuccess(Credentials mCredentials) {
+    public void onRegisterSuccess(Credentials mCredentials,String email) {
+        Bundle bundle=new Bundle();
+        bundle.putString("email",email);
+        Verification mverification = new Verification();
+        mverification.setArguments(bundle);
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_main,mverification)
+                .addToBackStack(null);
 
+        // Commit the transaction
+        transaction.commit();
     }
 
     @Override
@@ -66,4 +80,17 @@ public class MainActivity extends AppCompatActivity
                 .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
                 .commit();
     }
+
+
+
+    @Override
+    public void verifiedUserSendToSuccess(String email) {
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.putExtra("email", email);
+     //   intent.putExtra("id", id);
+        MainActivity.this.startActivity(intent);
+        finish();
+    }
+
+
 }

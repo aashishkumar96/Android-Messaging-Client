@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.chats;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.chats.ChatMessage;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.ChatMessage;
 
 import java.util.List;
 

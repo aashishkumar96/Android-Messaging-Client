@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.Connection;
 
 import java.util.ArrayList;
 import java.util.Arrays;

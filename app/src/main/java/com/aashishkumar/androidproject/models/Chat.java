@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject.chats;
+package com.aashishkumar.androidproject.models;
 
 import java.io.Serializable;
 

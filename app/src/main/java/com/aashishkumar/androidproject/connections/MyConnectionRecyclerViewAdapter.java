@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.aashishkumar.androidproject.R;
 import com.aashishkumar.androidproject.connections.ConnectionFragment.OnConnectionFragmentInteractionListener;
+import com.aashishkumar.androidproject.models.Connection;
 
 import java.util.Collections;
 import java.util.Comparator;

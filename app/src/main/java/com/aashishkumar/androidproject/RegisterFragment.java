@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.model.Credentials;
+import com.aashishkumar.androidproject.models.Credentials;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
 import org.json.JSONException;

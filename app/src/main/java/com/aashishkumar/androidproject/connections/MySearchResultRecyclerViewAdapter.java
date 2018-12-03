@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.aashishkumar.androidproject.R;
 import com.aashishkumar.androidproject.connections.SearchResultFragment.OnSearchListFragmentInteractionListener;
+import com.aashishkumar.androidproject.models.Connection;
 
 import java.util.List;
 

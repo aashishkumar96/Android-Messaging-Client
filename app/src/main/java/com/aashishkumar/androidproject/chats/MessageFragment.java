@@ -1,8 +1,7 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.chats;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aashishkumar.androidproject.chats.ChatMessage;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.ChatMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

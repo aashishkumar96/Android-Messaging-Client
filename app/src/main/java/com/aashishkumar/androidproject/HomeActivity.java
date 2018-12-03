@@ -18,11 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.aashishkumar.androidproject.chats.Chat;
+import com.aashishkumar.androidproject.models.Chat;
+import com.aashishkumar.androidproject.chats.ChatFragment;
+import com.aashishkumar.androidproject.chats.ChatWindowFragment;
 import com.aashishkumar.androidproject.connections.ConfirmProfileFragment;
-import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.models.Connection;
 import com.aashishkumar.androidproject.connections.ConnectionFragment;
-import com.aashishkumar.androidproject.connections.ConnectionOptionFragment;
 import com.aashishkumar.androidproject.connections.ConnectionProfileFragment;
 import com.aashishkumar.androidproject.connections.NoConnectionFragment;
 import com.aashishkumar.androidproject.connections.SearchConnectionFragment;
@@ -42,7 +43,6 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         WaitFragment.OnFragmentInteractionListener,
-        ConnectionOptionFragment.OnConnectionOptionFragmentInteractionListener,
         ConnectionFragment.OnConnectionFragmentInteractionListener,
         NoConnectionFragment.OnNoConnectionFragmentInteractionListener,
         ConnectionProfileFragment.OnConectionProfileFragmentInteractionListener,
@@ -190,7 +190,9 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             loadFragment(mHomeFragment);
         } else if (id == R.id.nav_connections) {
-            loadFragment(new ConnectionOptionFragment());
+            viewFriend();
+        } else if (id == R.id.nav_add_connection) {
+            addConnection();
         } else if (id == R.id.nav_weather) {
             loadFragment(new WeatherFragment());
         } else if (id == R.id.nav_chats) {
@@ -263,9 +265,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    // Done
-    @Override
-    public void onSearchClicked() {
+    private void addConnection() {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_home, new SearchConnectionFragment())
@@ -273,9 +273,7 @@ public class HomeActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    // Done
-    @Override
-    public void onViewFriendsClicked() {
+    private void viewFriend() {
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -378,7 +376,7 @@ public class HomeActivity extends AppCompatActivity
     // Done
     @Override
     public void onAddFriendClicked() {
-        onSearchClicked();
+        addConnection();
     }
 
     @Override
@@ -397,8 +395,6 @@ public class HomeActivity extends AppCompatActivity
             msg.put("username_self", mMemberUsername);
             msg.put("id_friend", mFriendID);
             msg.put("username_friend", mFriendUsername);
-            //msg.put("id_friend", friendID);
-            //msg.put("username_friend", friendUsername);
             msg.put("chat_name", chatName);
         } catch (JSONException e) {
             Log.wtf("ERROR! ", e.getMessage());
@@ -486,13 +482,12 @@ public class HomeActivity extends AppCompatActivity
     // Done
     private void handleRemoveFriendOnPostExecute(String result) {
         try {
-
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
             if (success) {
-                Toast.makeText(this, "This connection is removed", Toast.LENGTH_SHORT).show();
-                loadFragment(new ConnectionOptionFragment());
+                Toast.makeText(this, "Successfully removed!", Toast.LENGTH_SHORT).show();
+                viewFriend();
             } else {
                 Toast.makeText(this, "Error! This connection can't be removed!", Toast.LENGTH_SHORT).show();
             }

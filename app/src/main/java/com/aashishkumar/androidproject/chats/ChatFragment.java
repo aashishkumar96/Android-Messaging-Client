@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.chats;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.aashishkumar.androidproject.chats.Chat;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.Chat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,6 @@ public class ChatFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //recyclerView.setAdapter(new MyChatRecyclerViewAdapter(DummyContent.ITEMS, mListener));
             recyclerView.setAdapter(new MyChatRecyclerViewAdapter(mChats, mListener));
 
         }

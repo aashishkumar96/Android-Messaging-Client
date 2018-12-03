@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.aashishkumar.androidproject.R;
 import com.aashishkumar.androidproject.WaitFragment;
+import com.aashishkumar.androidproject.models.Connection;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
 import org.json.JSONArray;

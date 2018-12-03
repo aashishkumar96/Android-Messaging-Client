@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.aashishkumar.androidproject.model.Credentials;
+import com.aashishkumar.androidproject.models.Credentials;
 
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRegisterSuccess(Credentials mCredentials) {
-
+        // should load Verification fragment!
     }
 
     @Override

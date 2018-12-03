@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject.connections;
+package com.aashishkumar.androidproject.models;
 
 import java.io.Serializable;
 

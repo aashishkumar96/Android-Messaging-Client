@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.chats;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.chats.Chat;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.Chat;
 
 import java.util.List;
 

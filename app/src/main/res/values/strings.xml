@@ -9,6 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="welcome_home">Welcome!</string>
     <string name="nav_drawer_connections">Connections</string>
+    <string name="nav_drawer_add_connection">Add New Connection</string>
     <string name="nav_drawer_weather">Weather</string>
     <string name="nav_drawer_home">Home</string>
     <string name="nav_drawer_chats">Chat List</string>

@@ -1,8 +1,15 @@
 package com.aashishkumar.androidproject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +28,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -33,14 +42,18 @@ public class WeatherFragment extends Fragment {
     TextView selectCity, cityField, detailsField, currentTemperatureField, pressure_field, updatedField;
     ImageView imageView;
     ProgressBar loader;
-    String location = "Tacoma";
-    String city, country;
+    String location;
     String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838";
-    MyLocationsActivity myLocationsActivity;
+
+
+    double lat, lng;
+    String cityName, countryName;
+
 
     public WeatherFragment() {
         // Required empty public constructor
     }
+
 
 
 
@@ -61,13 +74,70 @@ public class WeatherFragment extends Fragment {
         pressure_field = v.findViewById(R.id.pressure_field);
         imageView = v.findViewById(R.id.image1View);
 
+
+
+
+        Geocoder geocoder;
+        String bestProvider;
+        List<Address> user = null;
+
+
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        bestProvider = lm.getBestProvider(criteria, false);
+        @SuppressLint("MissingPermission") Location locationNew = lm.getLastKnownLocation(bestProvider);
+
+        if (locationNew == null){
+            Toast.makeText(getActivity(),"Location Not found",Toast.LENGTH_LONG).show();
+        }else{
+            geocoder = new Geocoder(getActivity());
+            try {
+                user = geocoder.getFromLocation(locationNew.getLatitude(), locationNew.getLongitude(), 1);
+                lat=(double)user.get(0).getLatitude();
+                lng=(double)user.get(0).getLongitude();
+                System.out.println(" DDD lat: " +lat+",  longitude: "+lng);
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Geocoder geocoder1 = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder1.getFromLocation(lat, lng, 1);
+            cityName = addresses.get(0).getLocality();
+            countryName = addresses.get(0).getCountryCode();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+        location = cityName.concat(", "+countryName);
+
+
+
+        WeatherFragment fragment = new WeatherFragment();
+        Bundle args = new Bundle();
+        args.putString("Place", location);
+        fragment.setArguments(args);
+
+
         WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
         task.execute(location);
 
-//        city = myLocationsActivity.getCity();
-//        city = city.concat(", ");
-//        country = myLocationsActivity.getCountry();
-//        location = city.concat(country);
+
+
+
+
+
+
+
 
         selectCity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +158,10 @@ public class WeatherFragment extends Fragment {
                                 location = input.getText().toString();
                                 WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
                                 task.execute(location);
+                                WeatherFragment fragment = new WeatherFragment();
+                                Bundle args = new Bundle();
+                                args.putString("Place", location);
+                                fragment.setArguments(args);
                             }
                         });
                 alertDialog.setNegativeButton("Cancel",
@@ -109,6 +183,7 @@ public class WeatherFragment extends Fragment {
 
 
 
+
     class DownloadWeather extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -118,7 +193,7 @@ public class WeatherFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/current?city=" + location +
+            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/current?city=" + args[0] +
                     "&units=imperial&key=" + WEATHER_MAP_API);
             return xml;
         }
@@ -139,14 +214,12 @@ public class WeatherFragment extends Fragment {
                     int imageResource = getResources().getIdentifier(("@drawable/"+iconId),null, getActivity().getPackageName());
                     imageView.setImageResource(imageResource);
 
-                    location = (day.getString("city_name").toUpperCase(Locale.US) + ", " + day.getString("country_code"));
-                    cityField.setText(location);
-
 
                     detailsField.setText(weather.getString("description").toUpperCase(Locale.US));
                     currentTemperatureField.setText(String.format("%.2f", day.getDouble("temp")) + "°");
                     pressure_field.setText("Pressure: " + day.getDouble("pres") );
 
+                    cityField.setText(day.getString("city_name")+", "+ day.getString("country_code"));
 
 
 
@@ -159,6 +232,8 @@ public class WeatherFragment extends Fragment {
 
 
         }
+
+
 
 
     }

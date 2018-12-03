@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +47,9 @@ public class WeatherforecastFragment extends Fragment {
             imageView6, imageView7, imageView8, imageView9, imageView10;
 
     String location = "Tacoma, US";
-    //    String city, country;
+
     String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838"; //
-    MyLocationsActivity myLocationsActivity;
+
 
 
     public WeatherforecastFragment() {
@@ -65,8 +66,16 @@ public class WeatherforecastFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_weatherforecast, container, false);
 
         cityField = v.findViewById(R.id.city_field1);
+//
+//        if(getArguments().getString("Place") == null) {
+//            location = "Tacoma";
+//        } else {
+//            location = getArguments().getString("Place");
+//        }
 
         cityField.setText(location);
+
+
 
 
         updateDate1 = v.findViewById(R.id.updated_field1);
@@ -150,7 +159,7 @@ public class WeatherforecastFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/forecast/daily?city=" + location +
+            String xml = Weather_Content.excuteGet("https://api.weatherbit.io/v2.0/forecast/daily?city=" + args[0] +
                     "&units=imperial&key=" + WEATHER_MAP_API);
             return xml;
         }
@@ -167,6 +176,8 @@ public class WeatherforecastFragment extends Fragment {
                             imageResource6, imageResource7, imageResource8, imageResource9, imageResource10;
                     JSONObject day1 = json.getJSONArray("data").getJSONObject(0);
                     JSONObject weather1 = day1.getJSONObject("weather");
+
+
 
                     iconId1 = weather1.getString("icon");
                     updateDate1.setText(day1.getString("datetime"));

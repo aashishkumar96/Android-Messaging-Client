@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.utils;
 
 import android.os.AsyncTask;
 

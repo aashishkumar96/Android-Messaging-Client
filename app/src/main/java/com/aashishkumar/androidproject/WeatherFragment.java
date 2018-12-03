@@ -198,6 +198,7 @@ public class WeatherFragment extends Fragment {
             return xml;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(String xml) {
 

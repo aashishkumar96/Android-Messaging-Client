@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.connections;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -7,30 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.SearchResultFragment.OnSearchListFragmentInteractionListener;
-import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.connections.ConnectionFragment.OnConnectionFragmentInteractionListener;
+import com.aashishkumar.androidproject.models.Connection;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Connection} and makes a call to the
- * specified {@link OnSearchListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
+ * specified {@link OnConnectionFragmentInteractionListener}.
  */
-public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySearchResultRecyclerViewAdapter.ViewHolder> {
+public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConnectionRecyclerViewAdapter.ViewHolder> {
 
     private final List<Connection> mValues;
-    private final OnSearchListFragmentInteractionListener mListener;
+    private final OnConnectionFragmentInteractionListener mListener;
 
-    public MySearchResultRecyclerViewAdapter(List<Connection> items, OnSearchListFragmentInteractionListener listener) {
+    public MyConnectionRecyclerViewAdapter(List<Connection> items, OnConnectionFragmentInteractionListener listener) {
         mValues = items;
+        Collections.sort(mValues, new Comparator<Connection>() {
+            @Override
+            public int compare(Connection o1, Connection o2) {
+                return o2.getVerified() - o1.getVerified();
+            }
+        });
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_searchresult, parent, false);
+                .inflate(R.layout.fragment_connection, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,11 +48,11 @@ public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySe
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mFullName.setText(mValues.get(position).getFullName());
 
-//        if (mValues.get(position).getVerified() == 0) {
-//            holder.mUsername.setTextColor(Color.GRAY);
-//        } else {
-//            holder.mUsername.setTextColor(Color.BLUE);
-//        }
+        if (mValues.get(position).getVerified() == 0) {
+            holder.mUsername.setText(mValues.get(position).getUsername() + " [UNVERIFIED]");
+            holder.mUsername.setTextColor(Color.GRAY);
+        }
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +60,7 @@ public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onSearchListFragmentInteraction(holder.mItem);
+                    mListener.onConnectionListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -72,8 +80,8 @@ public class MySearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MySe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mUsername = (TextView) view.findViewById(R.id.username_searchresult_frag);
-            mFullName = (TextView) view.findViewById(R.id.fullname_searchresult_frag);
+            mUsername = (TextView) view.findViewById(R.id.username_connection_frag);
+            mFullName = (TextView) view.findViewById(R.id.fullname_connection_frag);
         }
 
         @Override

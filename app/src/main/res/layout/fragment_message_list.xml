@@ -3,14 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.aashishkumar.androidproject.ConnectionFragment"
+    android:name="com.aashishkumar.androidproject.MessageFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    tools:context=".connections.ConnectionFragment"
-    tools:listitem="@layout/fragment_connection" >
-
-</android.support.v7.widget.RecyclerView>
+    tools:context=".chats.MessageFragment"
+    tools:listitem="@layout/fragment_message" />

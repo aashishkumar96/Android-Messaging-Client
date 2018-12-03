@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject.model;
+package com.aashishkumar.androidproject.models;
 
 import android.util.Log;
 

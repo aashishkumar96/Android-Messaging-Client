@@ -5,7 +5,7 @@
     android:id="@+id/layout_profile_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConnectionProfileFragment">
+    tools:context=".connections.ConnectionProfileFragment">
 
 
     <ImageView
@@ -37,8 +37,8 @@
         android:id="@+id/fname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="16dp"
         android:text="First name: "
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textColor="@android:color/holo_orange_dark"
@@ -85,34 +85,60 @@
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button_chat_profile_frag"
+        app:layout_constraintBottom_toTopOf="@+id/chatname_profile_frag"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.007"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/lname"
         app:layout_constraintTop_toBottomOf="@+id/fname_text_profile_frag"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/button_chat_profile_frag"
+    <EditText
+        android:id="@+id/chatname_profile_frag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/button_start_chat"
-        android:textColor="@android:color/holo_green_dark"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Enter a chat name"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/button_chat_profile_frag"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lname" />
 
     <Button
+        android:id="@+id/button_chat_profile_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/button_start_new_chat"
+        android:textColor="@android:color/holo_green_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lname_text_profile_frag" />
+
+    <Button
+        android:id="@+id/button_view_chatList_profile_frag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/button_view_chat_list"
+        android:textColor="@android:color/holo_blue_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_chat_profile_frag" />
+
+    <Button
         android:id="@+id/button_remove_profile_frag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/button_remove_friend"
         android:textColor="@android:color/holo_red_dark"
@@ -120,7 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_chat_profile_frag"
+        app:layout_constraintTop_toBottomOf="@+id/button_view_chatList_profile_frag"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

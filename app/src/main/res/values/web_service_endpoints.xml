@@ -8,7 +8,13 @@
     <string name="ep_addfriend">addfriend</string>
     <string name="ep_confirmfriend">confirmfriend</string>
     <string name="ep_removefriend">removefriend</string>
-
-
+    <string name="ep_with_token">with_token</string>
+    <string name="ep_messaging">messaging</string>
+    <string name="ep_send">send</string>
+    <string name="ep_startChat">startChat</string>
+    <string name="ep_addToChat">addToChat</string>
+    <string name="ep_leaveChat">leaveChat</string>
+    <string name="ep_getAll">getAll</string>
+    <string name="ep_myChats">myChats</string>
 
 </resources>

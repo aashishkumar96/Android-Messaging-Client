@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.connections;
 
 
 import android.content.Context;
@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.aashishkumar.androidproject.R;
 
 
 /**
@@ -29,8 +32,13 @@ public class ConnectionProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_connection_profile, container, false);
 
-        Button chat = (Button) v.findViewById(R.id.button_chat_profile_frag);
-        chat.setOnClickListener(view ->mListener.onChatClicked());
+        EditText inputName = (EditText) v.findViewById(R.id.chatname_profile_frag);
+
+        Button newChat = (Button) v.findViewById(R.id.button_chat_profile_frag);
+        newChat.setOnClickListener(view ->mListener.onNewChatClicked(inputName.getText().toString()));
+
+        Button viewChatList = (Button) v.findViewById(R.id.button_view_chatList_profile_frag);
+        viewChatList.setOnClickListener(view ->mListener.onViewChatListClicked());
 
         Button remove = (Button) v.findViewById(R.id.button_remove_profile_frag);
         remove.setOnClickListener(view ->mListener.onRemoveClicked());
@@ -41,6 +49,8 @@ public class ConnectionProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+
 
         if (getArguments() != null) {
             String username = getArguments().getString("username");
@@ -57,7 +67,6 @@ public class ConnectionProfileFragment extends Fragment {
 
         }
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -77,7 +86,8 @@ public class ConnectionProfileFragment extends Fragment {
     }
 
     public interface OnConectionProfileFragmentInteractionListener {
-        void onChatClicked();
+        void onNewChatClicked(String chatName);
+        void onViewChatListClicked();
         void onRemoveClicked();
     }
 

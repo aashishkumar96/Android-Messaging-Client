@@ -1,4 +1,4 @@
-package com.aashishkumar.androidproject;
+package com.aashishkumar.androidproject.connections;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aashishkumar.androidproject.connections.Connection;
+import com.aashishkumar.androidproject.R;
+import com.aashishkumar.androidproject.models.Connection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,27 +21,27 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnSearchListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnConnectionFragmentInteractionListener}
  * interface.
  */
-public class SearchResultFragment extends Fragment {
+public class ConnectionFragment extends Fragment {
 
-    public static final String ARG_SEARCH_LIST = "search lists";
-    private List<Connection> mSearchConnections;
+    public static final String ARG_CONNECTION_LIST = "connection lists";
+    private List<Connection> mConnections;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnSearchListFragmentInteractionListener mListener;
+    private OnConnectionFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SearchResultFragment() {
+    public ConnectionFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static SearchResultFragment newInstance(int columnCount) {
-        SearchResultFragment fragment = new SearchResultFragment();
+    public static ConnectionFragment newInstance(int columnCount) {
+        ConnectionFragment fragment = new ConnectionFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -52,11 +53,11 @@ public class SearchResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mSearchConnections = new ArrayList<Connection>(
+            mConnections = new ArrayList<Connection>(
                     Arrays.asList((Connection[]) getArguments()
-                            .getSerializable(ARG_SEARCH_LIST)));
+                            .getSerializable(ARG_CONNECTION_LIST)));
         } else {
-            Log.e("ERROR!", "no search list");
+            Log.e("ERROR!", "no connection list");
         }
     }
 
@@ -74,7 +75,7 @@ public class SearchResultFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MySearchResultRecyclerViewAdapter(mSearchConnections, mListener));
+            recyclerView.setAdapter(new MyConnectionRecyclerViewAdapter(mConnections, mListener));
         }
         return view;
     }
@@ -83,11 +84,11 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnSearchListFragmentInteractionListener) {
-            mListener = (OnSearchListFragmentInteractionListener) context;
+        if (context instanceof OnConnectionFragmentInteractionListener) {
+            mListener = (OnConnectionFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnConnectionFragmentInteractionListener");
         }
     }
 
@@ -96,6 +97,8 @@ public class SearchResultFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -107,7 +110,7 @@ public class SearchResultFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnSearchListFragmentInteractionListener {
-        void onSearchListFragmentInteraction(Connection item);
+    public interface OnConnectionFragmentInteractionListener {
+        void onConnectionListFragmentInteraction(Connection item);
     }
 }

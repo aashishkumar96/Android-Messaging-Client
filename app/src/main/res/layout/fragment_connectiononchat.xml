@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/image_icon_connection_fragment"
+                android:id="@+id/image_icon_connectiononchat_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin"
@@ -35,7 +35,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/username_connection_frag"
+                    android:id="@+id/username_connectiononchat_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin"
@@ -43,7 +43,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/fullname_connection_frag"
+                    android:id="@+id/fullname_connectiononchat_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_margin"

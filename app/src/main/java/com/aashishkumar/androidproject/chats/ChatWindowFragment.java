@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,17 @@ import android.widget.Toast;
 
 import com.aashishkumar.androidproject.R;
 import com.aashishkumar.androidproject.chats.MessageFragment;
+import com.aashishkumar.androidproject.connections.ConnectionOnChatFragment;
+import com.aashishkumar.androidproject.models.Connection;
 import com.aashishkumar.androidproject.utils.MyFirebaseMessagingService;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,8 +37,6 @@ import org.json.JSONObject;
 public class ChatWindowFragment extends Fragment {
 
     private static final String TAG = "CHAT_WINDOW_FRAG";
-
-    //private static final String CHAT_ID = "1";
 
     private int mChatID;
 
@@ -64,7 +69,7 @@ public class ChatWindowFragment extends Fragment {
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         rootLayout.findViewById(R.id.button_chat_send_message).setOnClickListener(this::handleSendClick);
 
-        rootLayout.findViewById(R.id.button_addToChat_chatwindow_frag).setOnClickListener(this::onAddToChatClicked);
+        rootLayout.findViewById(R.id.button_addToChat_chatwindow_frag).setOnClickListener(this::viewFriends);
         rootLayout.findViewById(R.id.button_leaveChat_chatwindow_frag).setOnClickListener(this::onLeaveChatClicked);
 
         return rootLayout;
@@ -95,14 +100,6 @@ public class ChatWindowFragment extends Fragment {
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_messaging))
                 .appendPath(getString(R.string.ep_send))
-                .build()
-                .toString();
-
-        mAddToChat = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_messaging))
-                .appendPath(getString(R.string.ep_addToChat))
                 .build()
                 .toString();
 
@@ -173,24 +170,67 @@ public class ChatWindowFragment extends Fragment {
         }
     }
 
-    private void onAddToChatClicked(final View theButton) {
+    private void viewFriends(final View theButton) {
+        Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_connections))
+                .appendPath(getString(R.string.ep_viewfriends))
+                .build();
 
-        JSONObject messageJson = new JSONObject();
+        JSONObject msg = new JSONObject();
+
         try {
-            messageJson.put("chatid", mChatID);
-            messageJson.put("id_friend", mUsername);
+            msg.put("id_self", mUserID);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.wtf("ERROR! ", e.getMessage());
         }
 
-        new SendPostAsyncTask.Builder(mAddToChat, messageJson)
-                .onPostExecute(this::handleAddToChatOnPost)
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPostExecute(this::getFriendList)
                 .onCancelled(error ->Log.e(TAG, error))
                 .build().execute();
     }
 
-    private void handleAddToChatOnPost(final String result) {
+    private void getFriendList(String result) {
+        try {
+            JSONObject root = new JSONObject(result);
+            JSONArray data = root.getJSONArray("result");
 
+            List<Connection> connections = new ArrayList<>();
+
+            for(int i = 0; i < data.length(); i++) {
+                JSONObject jsonConnection = data.getJSONObject(i);
+                if (jsonConnection.getInt("verified") == 1) {
+                    connections.add(new Connection.Builder(jsonConnection.getString("username"))
+                            .addFirstName(jsonConnection.getString("firstname"))
+                            .addLastName(jsonConnection.getString("lastname"))
+                            .addID(jsonConnection.getInt("memberid"))
+                            .addChatID(Integer.toString(mChatID))
+                            .build());
+                }
+            }
+
+            Connection[] connectionsArray = new Connection[connections.size()];
+            connectionsArray = connections.toArray(connectionsArray);
+
+            Bundle args = new Bundle();
+            args.putSerializable(ConnectionOnChatFragment.ARG_CONNECTION_ON_CHAT_LIST, connectionsArray);
+            Fragment frag = new ConnectionOnChatFragment();
+            frag.setArguments(args);
+
+            // load the list of verified connection to add to chat
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_home, frag)
+                    .addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+        }
     }
 
     private void onLeaveChatClicked(final View theButton) {
@@ -249,6 +289,7 @@ public class ChatWindowFragment extends Fragment {
 //            e.printStackTrace();
 //        }
     }
+
 
 
 

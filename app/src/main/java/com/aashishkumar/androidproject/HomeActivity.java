@@ -18,10 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.aashishkumar.androidproject.chats.MessageFragment;
+import com.aashishkumar.androidproject.connections.ConnectionOnChatFragment;
 import com.aashishkumar.androidproject.models.Chat;
 import com.aashishkumar.androidproject.chats.ChatFragment;
 import com.aashishkumar.androidproject.chats.ChatWindowFragment;
 import com.aashishkumar.androidproject.connections.ConfirmProfileFragment;
+import com.aashishkumar.androidproject.models.ChatMessage;
 import com.aashishkumar.androidproject.models.Connection;
 import com.aashishkumar.androidproject.connections.ConnectionFragment;
 import com.aashishkumar.androidproject.connections.ConnectionProfileFragment;
@@ -50,7 +53,8 @@ public class HomeActivity extends AppCompatActivity
         SearchConnectionFragment.OnSearchConnetionFragmentInteractionListener,
         SearchResultFragment.OnSearchListFragmentInteractionListener,
         SearchProfileFragment.OnSearchProfileFragmentInteractionListener,
-        ChatFragment.OnChatListFragmentInteractionListener {
+        ChatFragment.OnChatListFragmentInteractionListener,
+        ConnectionOnChatFragment.OnConnectionOnChatInteractionListener {
 
     private HomeFragment mHomeFragment;
     private String mMemberID;
@@ -138,6 +142,46 @@ public class HomeActivity extends AppCompatActivity
         new DeleteTokenAsyncTask().execute();
     }
 
+    @Override
+    public void onConnectionOnChat(Connection item) {
+
+        String addToChat = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_messaging))
+                .appendPath(getString(R.string.ep_addToChat))
+                .build()
+                .toString();
+        JSONObject messageJson = new JSONObject();
+        try {
+            messageJson.put("chatid", item.getChatID());
+            messageJson.put("id_friend", item.getMemID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new SendPostAsyncTask.Builder(addToChat, messageJson)
+                .onPostExecute(this::handleAddToChatOnPost)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+    }
+
+    private void handleAddToChatOnPost(final String result) {
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Toast.makeText(this,"Successfully added to this chat!", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(this, "Cannot leave this chat room yet!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR!", e.getMessage());
+        }
+    }
+
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
     // we have something that allows us to do that.
     class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -172,7 +216,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-
     private void loadFragment(Fragment frag) {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
@@ -202,6 +245,33 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void handleGetAllMsgOnPostExecute(final String result) {
+        try {
+            JSONObject root = new JSONObject(result);
+            JSONArray data = root.getJSONArray("messages");
+
+            List<ChatMessage> messages = new ArrayList<>();
+
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject jsonMsg = data.getJSONObject(i);
+                messages.add(new ChatMessage.Builder(jsonMsg.getString("email"))
+                        .addMessage(jsonMsg.getString("message"))
+                        .build());
+            }
+
+            ChatMessage[] msgArray = new ChatMessage[messages.size()];
+            msgArray = messages.toArray(msgArray);
+
+            Bundle args = new Bundle();
+            args.putSerializable(MessageFragment.ARG_MESSAGE_LIST, msgArray);
+            Fragment frag = new MessageFragment();
+            frag.setArguments(args);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void openChatList() {
@@ -347,7 +417,6 @@ public class HomeActivity extends AppCompatActivity
         Bundle args = new Bundle();
         mFriendID = Integer.toString(item.getMemID());
         mFriendUsername = item.getUsername();
-        saveFriendInfo();
         args.putString("username", mFriendUsername);
         args.putString("fname", item.getFirstName());
         args.putString("lname", item.getLastName());
@@ -361,16 +430,6 @@ public class HomeActivity extends AppCompatActivity
             profileFragment.setArguments(args);
             loadFragment(profileFragment);
         }
-    }
-
-    // Done
-    private void saveFriendInfo() {
-        SharedPreferences prefs = getSharedPreferences(
-                getString(R.string.keys_shared_prefs),
-                Context.MODE_PRIVATE);
-        //Store the friend's info in SharedPrefs
-        prefs.edit().putString(getString(R.string.keys_prefs_friend_username), mFriendUsername).apply();
-        prefs.edit().putString(getString(R.string.keys_prefs_friend_id), mFriendID).apply();
     }
 
     // Done

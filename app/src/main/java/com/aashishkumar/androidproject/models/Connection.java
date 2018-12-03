@@ -15,6 +15,7 @@ public class Connection implements Serializable {
     private final String mLname;
     private final int mMemID;
     private int mVerified;
+    private final String mChatID;
 
     /**
      * Helper class for building Credentials.
@@ -27,6 +28,7 @@ public class Connection implements Serializable {
         private String mLname = "";
         private int mMemID = 0;
         private int mVerified = 0;
+        private String mChatID = "";
 
 
         /**
@@ -68,6 +70,10 @@ public class Connection implements Serializable {
             return this;
         }
 
+        public Builder addChatID(final String val) {
+            mChatID = val;
+            return this;
+        }
 
         public Connection build() {
             return new Connection(this);
@@ -81,6 +87,7 @@ public class Connection implements Serializable {
         this.mLname = builder.mLname;
         this.mMemID = builder.mMemID;
         this.mVerified = builder.mVerified;
+        this.mChatID = builder.mChatID;
     }
 
     public String getUsername() {
@@ -106,4 +113,6 @@ public class Connection implements Serializable {
     public String getFullName() { return mFname + " " + mLname; }
 
     public int getVerified() { return mVerified; }
+
+    public String getChatID() { return mChatID; }
 }

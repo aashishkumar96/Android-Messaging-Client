@@ -19,10 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Connection that available to add to chat.
+ * Only confirmed connections displays in this list.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnConnectionOnChatInteractionListener}
  * interface.
+ *
+ * @author Hien Doan
  */
 public class ConnectionOnChatFragment extends Fragment {
 

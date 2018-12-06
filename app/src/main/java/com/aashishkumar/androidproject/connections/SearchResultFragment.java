@@ -23,6 +23,8 @@ import java.util.List;
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnSearchListFragmentInteractionListener}
  * interface.
+ *
+ * @author Hien Doan
  */
 public class SearchResultFragment extends Fragment {
 

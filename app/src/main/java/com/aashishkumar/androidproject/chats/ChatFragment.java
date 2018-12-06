@@ -20,10 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Chat window.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnChatListFragmentInteractionListener}
  * interface.
+ *
+ * @author Hien Doan
  */
 public class ChatFragment extends Fragment {
 
@@ -79,6 +81,7 @@ public class ChatFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            // set the adapter for this specific chat from the list of chat
             recyclerView.setAdapter(new MyChatRecyclerViewAdapter(mChats, mListener));
 
         }

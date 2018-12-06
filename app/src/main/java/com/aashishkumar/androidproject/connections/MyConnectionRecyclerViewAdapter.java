@@ -18,6 +18,9 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Connection} and makes a call to the
  * specified {@link OnConnectionFragmentInteractionListener}.
+ *
+ * @author Robert Bohlman
+ * @author Hien Doan
  */
 public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConnectionRecyclerViewAdapter.ViewHolder> {
 
@@ -26,6 +29,8 @@ public class MyConnectionRecyclerViewAdapter extends RecyclerView.Adapter<MyConn
 
     public MyConnectionRecyclerViewAdapter(List<Connection> items, OnConnectionFragmentInteractionListener listener) {
         mValues = items;
+
+        // sort the connection list
         Collections.sort(mValues, new Comparator<Connection>() {
             @Override
             public int compare(Connection o1, Connection o2) {

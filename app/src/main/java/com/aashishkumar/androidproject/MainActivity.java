@@ -7,6 +7,12 @@ import android.os.Bundle;
 
 import com.aashishkumar.androidproject.models.Credentials;
 
+/**
+ * Main activity - handle login and register
+ *
+ * @author Robert Bohlman
+ * @author Hien Doan
+ */
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
         RegisterFragment.OnRegisterFragmentInteractionListener {
@@ -25,6 +31,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Once login successfully, start HomeActivity
+     *
+     * @param mCredentials is the credential from login
+     * @param username is the username get from login
+     * @param id is the member id get from login
+     */
     @Override
     public void onLoginSuccess(Credentials mCredentials, String username, String id) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
@@ -35,6 +48,10 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    /**
+     * Once register button is clicked in LoginFragment,
+     * go to the RegisterFragment.
+     */
     @Override
     public void onRegisterClicked() {
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -51,6 +68,9 @@ public class MainActivity extends AppCompatActivity
         // should load Verification fragment!
     }
 
+    /**
+     * Load and display the wait fragment
+     */
     @Override
     public void onWaitFragmentInteractionShow() {
         getSupportFragmentManager()
@@ -60,6 +80,9 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * Hide the wait fragment
+     */
     @Override
     public void onWaitFragmentInteractionHide() {
         getSupportFragmentManager()

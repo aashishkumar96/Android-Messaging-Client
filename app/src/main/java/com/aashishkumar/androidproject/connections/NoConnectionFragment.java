@@ -15,6 +15,9 @@ import com.aashishkumar.androidproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ * This fragment is loaded when there is no connection
+ *
+ * @author Hien Doan
  */
 public class NoConnectionFragment extends Fragment {
 

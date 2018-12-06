@@ -15,6 +15,9 @@ import com.aashishkumar.androidproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Show the connection profile of a search result
+ *
+ * @author Hien Doan
  */
 public class SearchProfileFragment extends Fragment {
 
@@ -39,14 +42,17 @@ public class SearchProfileFragment extends Fragment {
         super.onStart();
 
         if (getArguments() != null) {
+            // Get the username from search list and set to this fragment
             String username = getArguments().getString("username");
             TextView tv = getActivity().findViewById(R.id.username_text_searchprofile_frag);
             tv.setText(username);
 
+            // Get the first name from search list and set to this fragment
             String fname = getArguments().getString("fname");
             TextView tv1 = getActivity().findViewById(R.id.fname_text_searchprofile_frag);
             tv1.setText(fname);
 
+            // Get the last name from search list and set to this fragment
             String lname = getArguments().getString("lname");
             TextView tv2 = getActivity().findViewById(R.id.lname_text_searchprofile_frag);
             tv2.setText(lname);

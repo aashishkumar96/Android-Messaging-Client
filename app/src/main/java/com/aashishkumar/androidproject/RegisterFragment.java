@@ -22,6 +22,9 @@ import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Fragment to handle registration process
+ *
+ * @author Hien Doan
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener{
 
@@ -59,6 +62,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Attempt to register
+     * @param theButton is the view
+     */
     private void attemptRegister(final View theButton) {
 
         EditText uname = getActivity().findViewById(R.id.unameText_register_fragment);
@@ -143,6 +150,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Helper method to check for email validation
+     *
+     * @param email is the email needed to be checked
+     * @return whether this email is valid or not
+     */
     private boolean isValidEmail(String email) {
         boolean result = false;
         char[] array = email.toCharArray();

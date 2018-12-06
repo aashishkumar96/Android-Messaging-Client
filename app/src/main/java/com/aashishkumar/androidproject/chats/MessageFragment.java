@@ -18,10 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Message in a chat window.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnChatMessageListFragmentInteractionListener}
  * interface.
+ *
+ * @author Hien Doan
  */
 public class MessageFragment extends Fragment {
 

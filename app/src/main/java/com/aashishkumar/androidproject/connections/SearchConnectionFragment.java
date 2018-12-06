@@ -32,6 +32,8 @@ import java.util.List;
  * Activities that contain this fragment must implement the
  * {@link OnSearchConnetionFragmentInteractionListener} interface
  * to handle interaction events.
+ *
+ * @author Hien Doan
  */
 public class SearchConnectionFragment extends Fragment implements View.OnClickListener {
 
@@ -68,7 +70,8 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
 
     /**
      * Helper method to do the search
-     * @param theButton
+     *
+     * @param theButton is the view
      */
     private void attemptSearch(final View theButton) {
         EditText usernameInput = getActivity().findViewById(R.id.text_search_searchFragment);
@@ -107,6 +110,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
 
     /**
      * Handle errors that may occur during the AsyncTask.
+     *
      * @param result the error message provide from the AsyncTask
      */
     private void handleErrorsInTask(String result) {
@@ -123,6 +127,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
     /**
      * Handle onPostExecute of the AsynceTask. The result from our webservice is
      * a JSON formatted String. Parse it for success or failure.
+     *
      * @param result the JSON formatted String response from the web service
      */
     private void handleSearchOnPost(String result) {
@@ -169,6 +174,10 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
 
     }
 
+    /**
+     * Helper method to load fragment
+     * @param frag is the fragment needed to load
+     */
     private void loadFragment(Fragment frag) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -210,6 +219,9 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
         void onFragmentInteraction();
     }
 
+    /**
+     * Show wait fragment as progress circle
+     */
     public void onWaitFragmentInteractionShow() {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -218,6 +230,9 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
                 .commit();
     }
 
+    /**
+     * Hide wait fragment
+     */
     public void onWaitFragmentInteractionHide() {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()

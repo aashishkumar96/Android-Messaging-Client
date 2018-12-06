@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link ChatMessage} and makes a call to the
  * specified {@link MessageFragment.OnChatMessageListFragmentInteractionListener}.
+ *
+ * @author Hien Doan
  */
 public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessageRecyclerViewAdapter.ViewHolder> {
 
@@ -41,15 +43,15 @@ public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessage
         holder.mUsername.setText(mValues.get(position).getUserName());
         holder.mContentView.setText(mValues.get(position).getMsg());
 
-        if (mValues.get(position).getUserName().equals("hdoan184")) {
-            holder.mUsername.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-            holder.mUsername.setTextColor(Color.CYAN);
-            //holder.mContentView.setForegroundGravity(View.);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
-            params.gravity = Gravity.RIGHT;
-            holder.mContentView.setLayoutParams(params);
-
-        }
+//        if (mValues.get(position).getUserName().equals()) {
+//            holder.mUsername.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+//            holder.mUsername.setTextColor(Color.CYAN);
+//            //holder.mContentView.setForegroundGravity(View.);
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
+//            params.gravity = Gravity.RIGHT;
+//            holder.mContentView.setLayoutParams(params);
+//
+//        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

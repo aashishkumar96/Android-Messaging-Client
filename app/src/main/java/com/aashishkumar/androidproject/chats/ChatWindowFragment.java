@@ -33,6 +33,9 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
+ * A class that represents the chat window
+ *
+ * @author Hien Doan
  */
 public class ChatWindowFragment extends Fragment {
 
@@ -46,12 +49,12 @@ public class ChatWindowFragment extends Fragment {
     private String mUsername;
     private String mUserID;
 
-    private String mAddToChat;
+//    private String mAddToChat;
     private String mLeaveChat;
     private String mSendUrl;
     private String mGetAllMsg;
 
-    private final Fragment mMsgFrag = new MessageFragment();
+//    private final Fragment mMsgFrag = new MessageFragment();
     private FirebaseMessageReciever mFirebaseMessageReciever;
 
 
@@ -85,10 +88,12 @@ public class ChatWindowFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // Get the chat name from previous chat list and set to this chat window
         String chatName = getArguments().getString("chatname");
         TextView tv = getActivity().findViewById(R.id.text_chatname_chatwindow_frag);
         tv.setText(chatName);
 
+        // Get the chat id, username and user id of the msg sender
         mChatID = getArguments().getInt("chatid");
         //Log.e("chatid is: ", Integer.toString(mChatID));
         mUsername = getArguments().getString("username_self");
@@ -103,6 +108,7 @@ public class ChatWindowFragment extends Fragment {
                 .build()
                 .toString();
 
+        // build the leave chat url
         mLeaveChat = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -111,6 +117,7 @@ public class ChatWindowFragment extends Fragment {
                 .build()
                 .toString();
 
+        // build the get all msg url
         mGetAllMsg = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -119,6 +126,7 @@ public class ChatWindowFragment extends Fragment {
                 .appendQueryParameter("chatId", Integer.toString(mChatID))
                 .build()
                 .toString();
+
 
         JSONObject msg = new JSONObject();
         try {
@@ -134,6 +142,11 @@ public class ChatWindowFragment extends Fragment {
 
     }
 
+    /**
+     * Handle the send message button
+     *
+     * @param theButton is the view
+     */
     private void handleSendClick(final View theButton) {
         String msg = mMessageInputEditText.getText().toString();
 
@@ -153,6 +166,10 @@ public class ChatWindowFragment extends Fragment {
                 .build().execute();
     }
 
+    /**
+     * Handle the post request on send message
+     * @param result is the result from web service
+     */
     private void endOfSendMsgTask(final String result) {
         try {
             //This is the result from the web service
@@ -170,6 +187,12 @@ public class ChatWindowFragment extends Fragment {
         }
     }
 
+    /**
+     * Hanlde the add friend to chat button by open list of connection to select.
+     * Only verified connections are shown in this list
+     *
+     * @param theButton is the view
+     */
     private void viewFriends(final View theButton) {
         Uri uri = new Uri.Builder()
                 .scheme("https")
@@ -192,6 +215,11 @@ public class ChatWindowFragment extends Fragment {
                 .build().execute();
     }
 
+    /**
+     * Handle the post request to show the verified friend list
+     *
+     * @param result is the result from web service
+     */
     private void getFriendList(String result) {
         try {
             JSONObject root = new JSONObject(result);
@@ -233,6 +261,11 @@ public class ChatWindowFragment extends Fragment {
         }
     }
 
+    /**
+     * Handle the leave chat button
+     *
+     * @param theButton is the view
+     */
     private void onLeaveChatClicked(final View theButton) {
         JSONObject messageJson = new JSONObject();
 
@@ -249,6 +282,11 @@ public class ChatWindowFragment extends Fragment {
                 .build().execute();
     }
 
+    /**
+     * Handle the post request on leave chat
+     *
+     * @param result is the result from web service
+     */
     private void handleLeaveChatOnPost(final String result) {
         try {
             Log.d("JSON result",result);

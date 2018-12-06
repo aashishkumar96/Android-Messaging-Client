@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Fragment to display the home page of this app.
+ *
+ * @author Robert Bohlman
+ * @author Hien Doan
  */
 public class HomeFragment extends Fragment {
 

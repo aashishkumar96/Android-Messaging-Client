@@ -43,6 +43,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Home Activity - handle the Connection/Chat functionality/interaction
+ *
+ * @author Hien Doan
+ * @author Robert Bohlman
+ */
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         WaitFragment.OnFragmentInteractionListener,
@@ -123,13 +129,16 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            logout();
+            logout(); // log out this app
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * A helper method to logout from this app
+     */
     private void logout() {
         SharedPreferences prefs =
                 getSharedPreferences(
@@ -140,46 +149,6 @@ public class HomeActivity extends AppCompatActivity
         prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
 
         new DeleteTokenAsyncTask().execute();
-    }
-
-    @Override
-    public void onConnectionOnChat(Connection item) {
-
-        String addToChat = new Uri.Builder()
-                .scheme("https")
-                .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_messaging))
-                .appendPath(getString(R.string.ep_addToChat))
-                .build()
-                .toString();
-        JSONObject messageJson = new JSONObject();
-        try {
-            messageJson.put("chatid", item.getChatID());
-            messageJson.put("id_friend", item.getMemID());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        new SendPostAsyncTask.Builder(addToChat, messageJson)
-                .onPostExecute(this::handleAddToChatOnPost)
-                .onCancelled(this::handleErrorInTask)
-                .build().execute();
-    }
-
-    private void handleAddToChatOnPost(final String result) {
-        try {
-            Log.d("JSON result",result);
-            JSONObject resultsJSON = new JSONObject(result);
-            boolean success = resultsJSON.getBoolean("success");
-            if (success) {
-                Toast.makeText(this,"Successfully added to this chat!", Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(this, "Cannot leave this chat room yet!", Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            Log.e("JSON_PARSE_ERROR!", e.getMessage());
-        }
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
@@ -216,6 +185,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * A method helps to load new fragment
+     *
+     * @param frag is the fragment that needed to load
+     */
     private void loadFragment(Fragment frag) {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
@@ -247,33 +221,36 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    private void handleGetAllMsgOnPostExecute(final String result) {
-        try {
-            JSONObject root = new JSONObject(result);
-            JSONArray data = root.getJSONArray("messages");
+//    private void handleGetAllMsgOnPostExecute(final String result) {
+//        try {
+//            JSONObject root = new JSONObject(result);
+//            JSONArray data = root.getJSONArray("messages");
+//
+//            List<ChatMessage> messages = new ArrayList<>();
+//
+//            for (int i = 0; i < data.length(); i++) {
+//                JSONObject jsonMsg = data.getJSONObject(i);
+//                messages.add(new ChatMessage.Builder(jsonMsg.getString("email"))
+//                        .addMessage(jsonMsg.getString("message"))
+//                        .build());
+//            }
+//
+//            ChatMessage[] msgArray = new ChatMessage[messages.size()];
+//            msgArray = messages.toArray(msgArray);
+//
+//            Bundle args = new Bundle();
+//            args.putSerializable(MessageFragment.ARG_MESSAGE_LIST, msgArray);
+//            Fragment frag = new MessageFragment();
+//            frag.setArguments(args);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            List<ChatMessage> messages = new ArrayList<>();
-
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject jsonMsg = data.getJSONObject(i);
-                messages.add(new ChatMessage.Builder(jsonMsg.getString("email"))
-                        .addMessage(jsonMsg.getString("message"))
-                        .build());
-            }
-
-            ChatMessage[] msgArray = new ChatMessage[messages.size()];
-            msgArray = messages.toArray(msgArray);
-
-            Bundle args = new Bundle();
-            args.putSerializable(MessageFragment.ARG_MESSAGE_LIST, msgArray);
-            Fragment frag = new MessageFragment();
-            frag.setArguments(args);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Build the url connect to webservice to get the chat list
+     */
     private void openChatList() {
         Uri uri = new Uri.Builder()
                 .scheme("https")
@@ -284,12 +261,14 @@ public class HomeActivity extends AppCompatActivity
 
         JSONObject msg = new JSONObject();
 
+        // add the require body for this post request
         try {
             msg.put("id_self", mMemberID);
         } catch (JSONException e) {
             Log.wtf("ERROR! ", e.getMessage());
         }
 
+        // send post request for the chat list
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onPostExecute(this::handleChatListOnPostExecute)
@@ -297,24 +276,34 @@ public class HomeActivity extends AppCompatActivity
                 .build().execute();
     }
 
+    /**
+     * Handle chatlist onPostExecute of the AsyncTask.
+     * The result from our webservice is a JSON formatted String.
+     * Parse it for success or failure.
+     *
+     * @param result the JSON formatted String response from the web service
+     */
     private void handleChatListOnPostExecute(String result) {
         try {
+            // GEt the result from web service
             JSONObject root = new JSONObject(result);
             JSONArray data = root.getJSONArray("result");
 
+            // Create a list to hold chat list
             List<Chat> chats = new ArrayList<>();
 
             if (data.length() == 0) {
                 onWaitFragmentInteractionHide();
                 Toast.makeText(this, "Empty Chat List!", Toast.LENGTH_SHORT).show();
             } else {
-
+                // Get the chat list as JSONObject
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject jsonChat = data.getJSONObject(i);
                     chats.add(new Chat.Builder(jsonChat.getString("name"))
                             .addChatId(jsonChat.getInt("chatid"))
                             .build());
                 }
+
 
                 Chat[] chatsArray = new Chat[chats.size()];
                 chatsArray = chats.toArray(chatsArray);
@@ -335,6 +324,58 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Handle the connection list on addToChat button of chat window
+     *
+     * @param item is the specific connection selected to add to this chat
+     */
+    @Override
+    public void onConnectionOnChat(Connection item) {
+        // build the url to webservice
+        String addToChat = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_messaging))
+                .appendPath(getString(R.string.ep_addToChat))
+                .build()
+                .toString();
+        JSONObject messageJson = new JSONObject();
+        try {
+            messageJson.put("chatid", item.getChatID());
+            messageJson.put("id_friend", item.getMemID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new SendPostAsyncTask.Builder(addToChat, messageJson)
+                .onPostExecute(this::handleAddToChatOnPost)
+                .onCancelled(this::handleErrorInTask)
+                .build().execute();
+    }
+
+    /**
+     * HAndle the post request on add to chat button click
+     *
+     * @param result is the result from webservice
+     */
+    private void handleAddToChatOnPost(final String result) {
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Toast.makeText(this,"Successfully added to this chat!", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(this, "Cannot leave this chat room yet!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR!", e.getMessage());
+        }
+    }
+    /**
+     * Go to SearchConnectonFragment to search for the connnection
+     */
     private void addConnection() {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
@@ -343,7 +384,11 @@ public class HomeActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    /**
+     * Build the url connect to webservice to get the list of connections
+     */
     private void viewFriend() {
+        // Build the url connects to webservice to view friend list
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -353,12 +398,14 @@ public class HomeActivity extends AppCompatActivity
 
         JSONObject msg = new JSONObject();
 
+        // Add the request body for this post request
         try {
             msg.put("id_self", mMemberID);
         } catch (JSONException e) {
             Log.wtf("ERROR! ", e.getMessage());
         }
 
+        // Build the post request with JSONObject
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onPostExecute(this::handleConnectionOnPostExecute)
@@ -367,13 +414,21 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    // Done
+    /**
+     * Handle connection onPostExecute of the AsyncTask.
+     * The result from our webservice is a JSON formatted String.
+     * Parse it for success or failure.
+     *
+     * @param result the JSON formatted String response from the web service
+     */
     private void handleConnectionOnPostExecute(final String result) {
 
         try {
+            // GEt the result from web service
             JSONObject root = new JSONObject(result);
             JSONArray data = root.getJSONArray("result");
 
+            // Create a list to hold connection list
             List<Connection> connections = new ArrayList<>();
 
             if (data.length() == 0) {
@@ -411,7 +466,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    // Done
+    /**
+     * Handle click from Connection list
+     *
+     * @param item is the specific Connection that's clicked
+     */
     @Override
     public void onConnectionListFragmentInteraction(Connection item) {
         Bundle args = new Bundle();
@@ -432,12 +491,20 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    // Done
+    /**
+     * Handle the add friend button click
+     */
     @Override
     public void onAddFriendClicked() {
         addConnection();
     }
 
+    /**
+     * Handle the start new chat button.
+     * Build url link to web service and send post request
+     *
+     * @param chatName is the name of chat window entered by user
+     */
     @Override
     public void onNewChatClicked(String chatName) {
         Uri uri = new Uri.Builder()
@@ -466,6 +533,11 @@ public class HomeActivity extends AppCompatActivity
                 .build().execute();
     }
 
+    /**
+     * Handle the result of post request for starting new chat
+     *
+     * @param result is the result from web service
+     */
     private void handleNewChatOnPostExecute(final String result) {
 
         try {
@@ -487,12 +559,20 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    //Done
+    /**
+     * Handle the view chat list button
+     */
     @Override
     public void onViewChatListClicked() {
         openChatList();
     }
 
+
+    /**
+     * Handle the click from Chat list
+     *
+     * @param item is the specific Chat window selected
+     */
     @Override
     public void onChatListFragmentInteraction(Chat item) {
         Bundle args = new Bundle();
@@ -509,9 +589,12 @@ public class HomeActivity extends AppCompatActivity
         loadFragment(frag);
     }
 
-    // Done
+    /**
+     * HAndle the remove friend button click
+     */
     @Override
     public void onRemoveClicked() {
+        // Build the url that connects to web service
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -520,6 +603,7 @@ public class HomeActivity extends AppCompatActivity
                 .build();
 
 
+        // Add the require body
         JSONObject msg = new JSONObject();
 
         try {
@@ -530,6 +614,7 @@ public class HomeActivity extends AppCompatActivity
             onWaitFragmentInteractionHide();
         }
 
+        // Send the post request
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onPostExecute(this::handleRemoveFriendOnPostExecute)
@@ -538,7 +623,11 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    // Done
+    /**
+     * Handle the post request on remove friend
+     *
+     * @param result is the result from webservice
+     */
     private void handleRemoveFriendOnPostExecute(String result) {
         try {
             Log.d("JSON result",result);
@@ -560,11 +649,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction() {
+    public void onFragmentInteraction() { }
 
-    }
-
-    // Done
+    /**
+     * Handle the click from Chat list
+     *
+     * @param item is the specific Chat that selected
+     */
     @Override
     public void onSearchListFragmentInteraction(Connection item) {
         // Get the memberid of the connection that you've searched
@@ -578,18 +669,16 @@ public class HomeActivity extends AppCompatActivity
         SearchProfileFragment frag = new SearchProfileFragment();
         frag.setArguments(args);
 
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.activity_home, frag)
-                .addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
+        loadFragment(frag);
     }
 
-    // Done
+    /**
+     * Handle the send request button click
+     */
     @Override
     public void onSendRequestClicked() {
+
+        // Build the url that connects to webservice
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -599,6 +688,7 @@ public class HomeActivity extends AppCompatActivity
 
         JSONObject msg = new JSONObject();
 
+        // Add the require body
         try {
             msg.put("id_self", mMemberID);
             msg.put("id_friend", mFriendID);
@@ -606,6 +696,7 @@ public class HomeActivity extends AppCompatActivity
             Log.wtf("ERROR! ", e.getMessage());
         }
 
+        // Build the post request with the require body
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onPostExecute(this::handleSendRequestOnPostExecute)
@@ -614,10 +705,14 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    // Done
+    /**
+     * Handle the send friend request on post request
+     *
+     * @param result is the result of post request
+     */
     private void handleSendRequestOnPostExecute(String result) {
         try {
-
+            // Get the result from web service
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
@@ -635,9 +730,12 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    // Done
+    /**
+     * Method to handle the confirm button clicked
+     */
     @Override
     public void onConfirmClicked() {
+        // Build the url that connect to web service
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -648,6 +746,7 @@ public class HomeActivity extends AppCompatActivity
 
         JSONObject msg = new JSONObject();
 
+        // Attach the require body for this post request
         try {
             msg.put("id_self", mMemberID);
             msg.put("id_friend", mFriendID);
@@ -656,6 +755,7 @@ public class HomeActivity extends AppCompatActivity
             onWaitFragmentInteractionHide();
         }
 
+        // Build this post request
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onPostExecute(this::handleConfirmFriendOnPostExecute)
@@ -664,10 +764,14 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    // Done
+    /**
+     * Handle the confirm friend on post request
+     *
+     * @param result is the result of post request
+     */
     private void handleConfirmFriendOnPostExecute(String result) {
         try {
-
+            // Get the result from web service
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
@@ -686,13 +790,17 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    // Done
+    /**
+     * Handle the decline button
+     */
     @Override
     public void onDeclineClicked() {
         onRemoveClicked();
     }
 
-    // Done
+    /**
+     * Show progress circle
+     */
     @Override
     public void onWaitFragmentInteractionShow() {
         getSupportFragmentManager()
@@ -702,7 +810,9 @@ public class HomeActivity extends AppCompatActivity
                 .commit();
     }
 
-    // Done
+    /**
+     * Hide progress circle
+     */
     @Override
     public void onWaitFragmentInteractionHide() {
         getSupportFragmentManager()
@@ -711,7 +821,11 @@ public class HomeActivity extends AppCompatActivity
                 .commit();
     }
 
-    // Done
+    /**
+     * Helper class to handle error in post request
+     *
+     * @param result is the error
+     */
     private void handleErrorInTask(String result) {
         Log.e("ERROR!", result);
     }

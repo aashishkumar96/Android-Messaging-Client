@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Chat} and makes a call to the
  * specified {@link ChatFragment.OnChatListFragmentInteractionListener}.
+ *
+ * @author Hien Doan
  */
 public class MyChatRecyclerViewAdapter extends RecyclerView.Adapter<MyChatRecyclerViewAdapter.ViewHolder> {
 

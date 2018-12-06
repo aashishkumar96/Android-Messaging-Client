@@ -19,10 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Connection.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnConnectionFragmentInteractionListener}
  * interface.
+ *
+ * @author Robert Bohlman
+ * @author Hien Doan
  */
 public class ConnectionFragment extends Fragment {
 

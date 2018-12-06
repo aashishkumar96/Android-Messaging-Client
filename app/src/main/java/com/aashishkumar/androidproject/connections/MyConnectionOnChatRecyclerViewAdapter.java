@@ -16,6 +16,8 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Connection} and makes a call to the
  * specified {@link OnConnectionOnChatInteractionListener}.
+ *
+ * @author Hien Doan
  */
 public class MyConnectionOnChatRecyclerViewAdapter extends RecyclerView.Adapter<MyConnectionOnChatRecyclerViewAdapter.ViewHolder> {
 

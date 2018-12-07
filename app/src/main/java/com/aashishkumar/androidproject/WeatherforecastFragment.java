@@ -1,28 +1,19 @@
 package com.aashishkumar.androidproject;
 
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.util.Date;
+
 import java.util.Locale;
 
 /**
@@ -41,7 +32,6 @@ public class WeatherforecastFragment extends Fragment {
             detailsField8, maxTemp8, minTemp8, updateDate8,
             detailsField9, maxTemp9, minTemp9, updateDate9,
             detailsField10, maxTemp10, minTemp10, updateDate10;
-
 
     ImageView imageView1, imageView2, imageView3, imageView4, imageView5,
             imageView6, imageView7, imageView8, imageView9, imageView10;
@@ -67,24 +57,13 @@ public class WeatherforecastFragment extends Fragment {
 
         cityField = v.findViewById(R.id.city_field1);
 
-//
-//        if(getArguments().getString("Place") == null) {
-//            location = "Tacoma";
-//        } else {
-//            location = getArguments().getString("Place");
-//        }
-
         cityField.setText(location);
-
-
-
 
         updateDate1 = v.findViewById(R.id.updated_field1);
         detailsField1 = v.findViewById(R.id.details_field1);
         maxTemp1 = v.findViewById(R.id.maxTemp1);
         minTemp1 = v.findViewById(R.id.minTemp1);
         imageView1 = v.findViewById(R.id.imageView2);
-
 
         updateDate2 = v.findViewById(R.id.updated_field2);
         detailsField2 = v.findViewById(R.id.details_field2);
@@ -140,9 +119,6 @@ public class WeatherforecastFragment extends Fragment {
         minTemp10 = v.findViewById(R.id.minTemp10);
         imageView10 = v.findViewById(R.id.imageView11);
 
-
-
-
         WeatherforecastFragment.DownloadWeather task = new WeatherforecastFragment.DownloadWeather();
         task.execute(location);
 
@@ -150,8 +126,9 @@ public class WeatherforecastFragment extends Fragment {
         return v;
     }
 
-
-
+    /**
+     * Class to parse the data from url and updating on fields.
+     */
     class DownloadWeather extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {

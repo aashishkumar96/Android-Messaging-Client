@@ -8,6 +8,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+/**
+ * A class with helper method that makes the url
+ * for weather to get the data in json format.
+ *
+ * @author Aashish Kumar
+ */
+
 public class Weather_Content {
 
 
@@ -47,9 +54,6 @@ public class Weather_Content {
             }
         }
     }
-
-
-
 
 
 

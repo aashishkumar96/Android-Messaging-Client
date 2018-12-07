@@ -1,15 +1,7 @@
 package com.aashishkumar.androidproject;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,17 +17,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aashishkumar.androidproject.models.Credentials;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 
 /**
+ *
+ * This Class return current weather.
  * A simple {@link Fragment} subclass.
  */
 public class WeatherFragment extends Fragment {
@@ -44,21 +34,12 @@ public class WeatherFragment extends Fragment {
     TextView selectCity, cityField, detailsField, currentTemperatureField, pressure_field, updatedField;
     ImageView imageView;
     ProgressBar loader;
-    String location;
+    String location = "Tacoma, US";
     String WEATHER_MAP_API = "58b43eca9e254f02a1f7b75ee9525838";
-
-
-    double lat, lng;
-    String cityName, countryName;
-
 
     public WeatherFragment() {
         // Required empty public constructor
     }
-
-
-
-
 
 
     @Override
@@ -76,74 +57,11 @@ public class WeatherFragment extends Fragment {
         pressure_field = v.findViewById(R.id.pressure_field);
         imageView = v.findViewById(R.id.image1View);
 
-
         Button b = (Button) v.findViewById(R.id.button_forecast);
         b.setOnClickListener(view -> loadFragment(new WeatherforecastFragment()));
 
-
-
-
-        Geocoder geocoder;
-        String bestProvider;
-        List<Address> user = null;
-
-
-        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        bestProvider = lm.getBestProvider(criteria, false);
-        @SuppressLint("MissingPermission") Location locationNew = lm.getLastKnownLocation(bestProvider);
-
-        if (locationNew == null){
-            Toast.makeText(getActivity(),"Location Not found",Toast.LENGTH_LONG).show();
-        }else{
-            geocoder = new Geocoder(getActivity());
-            try {
-                user = geocoder.getFromLocation(locationNew.getLatitude(), locationNew.getLongitude(), 1);
-                lat=(double)user.get(0).getLatitude();
-                lng=(double)user.get(0).getLongitude();
-                System.out.println(" DDD lat: " +lat+",  longitude: "+lng);
-
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Geocoder geocoder1 = new Geocoder(getContext(), Locale.getDefault());
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder1.getFromLocation(lat, lng, 1);
-            cityName = addresses.get(0).getLocality();
-            countryName = addresses.get(0).getCountryCode();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-
-        location = cityName.concat(", "+countryName);
-
-
-
-//        WeatherFragment fragment = new WeatherFragment();
-//        Bundle args = new Bundle();
-//        args.putString("Place", cityName);
-//        fragment.setArguments(args);
-
-
         WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
         task.execute(location);
-
-
-
-
-
-
-
-
 
         selectCity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,17 +75,12 @@ public class WeatherFragment extends Fragment {
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 input.setLayoutParams(lp);
                 alertDialog.setView(input);
-
                 alertDialog.setPositiveButton("Change",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 location = input.getText().toString();
                                 WeatherFragment.DownloadWeather task = new WeatherFragment.DownloadWeather();
                                 task.execute(location);
-//                                WeatherFragment fragment = new WeatherFragment();
-//                                Bundle args = new Bundle();
-//                                args.putString("Place", cityName);
-//                                fragment.setArguments(args);
                             }
                         });
                 alertDialog.setNegativeButton("Cancel",
@@ -183,8 +96,11 @@ public class WeatherFragment extends Fragment {
         return v;
     }
 
-
-
+    /**
+     * A method helps to load new fragment
+     *
+     * @param frag is the fragment that needed to load
+     */
     private void loadFragment(Fragment frag) {
         FragmentTransaction transaction =
                 getActivity().getSupportFragmentManager()
@@ -195,8 +111,9 @@ public class WeatherFragment extends Fragment {
     }
 
 
-
-
+    /**
+     * Class to parse the data from url and updating on fields.
+     */
     class DownloadWeather extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -221,22 +138,14 @@ public class WeatherFragment extends Fragment {
                     String iconId;
                     JSONObject day = json.getJSONArray("data").getJSONObject(0);
                     JSONObject weather = day.getJSONObject("weather");
-
-
                     iconId = weather.getString("icon");
                     updatedField.setText(day.getString("ob_time"));
                     int imageResource = getResources().getIdentifier(("@drawable/"+iconId),null, getActivity().getPackageName());
                     imageView.setImageResource(imageResource);
-
-
                     detailsField.setText(weather.getString("description").toUpperCase(Locale.US));
                     currentTemperatureField.setText(String.format("%.2f", day.getDouble("temp")) + "°");
                     pressure_field.setText("Pressure: " + day.getDouble("pres") );
-
                     cityField.setText(day.getString("city_name")+", "+ day.getString("country_code"));
-
-
-
                     loader.setVisibility(View.GONE);
 
                 }
@@ -244,16 +153,8 @@ public class WeatherFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "Error, Check City", Toast.LENGTH_SHORT).show();
             }
 
-
         }
 
-
-
-
     }
-
-
-
-
 
 }

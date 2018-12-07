@@ -31,10 +31,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private OnLoginFragmentInteractionListener mListener;
     private Credentials mCredentials;
-    private String mMemberID;
+    private int mMemberID;
+    private String mFirebaseToken;
     private CheckBox mStayLoggedInCheck;
     private String mUsername;
-    private String mFirebaseToken;
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -78,7 +79,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
             passwordEdit.setText(password);
 
-            doLogin(email,  password);
+            getFirebaseToken(email,  password);
         }
     }
 
@@ -94,6 +95,31 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     Log.wtf("", "Didn't expect to see me...");
             }
         }
+    }
+
+    private void getFirebaseToken(final String email, final String password) {
+        mListener.onWaitFragmentInteractionShow();
+
+        //add this app on this device to listen for the topic all
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+        //similar to a promise in JS.
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM: ", "getInstanceId failed", task.getException());
+                        mListener.onWaitFragmentInteractionHide();
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    mFirebaseToken = task.getResult().getToken();
+                    Log.d("FCM: ", mFirebaseToken);
+                    //the helper method that initiates login service
+                    doLogin(email, password);
+                });
+        //no code here. wait for the Task to complete.
     }
 
     /**
@@ -121,7 +147,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (!hasError) {
             String email = emailEdit.getText().toString();
             String password = passwordEdit.getText().toString();
-            doLogin(email, password);
+            getFirebaseToken(email, password);
         }
     }
 
@@ -186,7 +212,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleLoginOnPre() {
-        mListener.onWaitFragmentInteractionShow();
     }
 
     /**
@@ -199,10 +224,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
+            Log.d("DEBUG", "" + resultsJSON);
             boolean success = resultsJSON.getBoolean("success");
-            int id = resultsJSON.getInt("memberid");
-            mMemberID = Integer.toString(id);
             mUsername = resultsJSON.getString("username");
+            mMemberID = resultsJSON.getInt("memberid");
 
             //Log.e("username ", mUsername);
             //Log.e("userid ", mMemberID);
@@ -268,8 +293,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public interface OnLoginFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
-        void onLoginSuccess(Credentials mCredentials, String username, String id);
-        void onLoginSuccess(Credentials mCredentials, String id);
+        void onLoginSuccess(Credentials mCredentials, String username, int id);
         void onRegisterClicked();
     }
 }

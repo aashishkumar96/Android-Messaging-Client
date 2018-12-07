@@ -37,26 +37,11 @@ public class MainActivity extends AppCompatActivity
     /* Once login successfully, start HomeActivity
      *
      * @param mCredentials is the credential from login
-     * @param id is the member id get from login
-     */
-    @Override
-    public void onLoginSuccess(Credentials mCredentials, String id) {
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        intent.putExtra("email", mCredentials.getEmail());
-        intent.putExtra("id", id);
-        MainActivity.this.startActivity(intent);
-        finish();
-    }
-
-
-    /* Once login successfully, start HomeActivity
-     *
-     * @param mCredentials is the credential from login
      * @param username is the username get from login
      * @param id is the member id get from login
      */
     @Override
-    public void onLoginSuccess(Credentials mCredentials, String username, String id) {
+    public void onLoginSuccess(Credentials mCredentials, String username, int id) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         intent.putExtra("email", mCredentials.getEmail());
         intent.putExtra("username", username);

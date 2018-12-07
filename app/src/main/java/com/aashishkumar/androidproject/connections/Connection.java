@@ -13,7 +13,7 @@ public class Connection implements Serializable {
     private final String mEmail;
     private final String mFname;
     private final String mLname;
-    private final String mMemID;
+    private final int mMemID;
     private int mVerified;
 
     /**
@@ -25,7 +25,7 @@ public class Connection implements Serializable {
         private String mEmail = "";
         private String mFname = "";
         private String mLname = "";
-        private String mMemID = "";
+        private int mMemID = 0;
         private int mVerified = 0;
 
 
@@ -58,7 +58,7 @@ public class Connection implements Serializable {
             return this;
         }
 
-        public Builder addID(final String val) {
+        public Builder addID(final int val) {
             mMemID = val;
             return this;
         }
@@ -99,7 +99,7 @@ public class Connection implements Serializable {
         return mLname;
     }
 
-    public String getMemID() {
+    public int getMemID() {
         return mMemID;
     }
 

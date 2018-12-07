@@ -143,7 +143,7 @@ public class SearchConnectionFragment extends Fragment implements View.OnClickLi
                     connections.add(new Connection.Builder(jsonConnection.getString("username"))
                             .addFirstName(jsonConnection.getString("firstname"))
                             .addLastName(jsonConnection.getString("lastname"))
-                            .addID(jsonConnection.getString("memberid"))
+                            .addID(jsonConnection.getInt("memberid"))
                             .build());
                 }
 

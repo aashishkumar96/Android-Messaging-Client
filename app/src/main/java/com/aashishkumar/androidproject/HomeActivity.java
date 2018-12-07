@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,11 +24,13 @@ import android.widget.Toast;
 
 import com.aashishkumar.androidproject.connections.Connection;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +47,8 @@ public class HomeActivity extends AppCompatActivity
                    SearchProfileFragment.OnSearchProfileFragmentInteractionListener {
 
     private HomeFragment mHomeFragment;
-    private String mMemberID;
-    private String mFriendID;
+    private int mMemberID;
+    private int mFriendID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class HomeActivity extends AppCompatActivity
             // Get the email used to login
             Intent intent = getIntent();
             String emailAdd = intent.getStringExtra("email");
-            mMemberID = intent.getStringExtra("id");
+            mMemberID = intent.getIntExtra("id", 0);
             Bundle args = new Bundle();
             args.putString("emailAdd", emailAdd);
             mHomeFragment.setArguments(args);
@@ -125,14 +128,8 @@ public class HomeActivity extends AppCompatActivity
         prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
         prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
 
-        //close the app
-        //finishAndRemoveTask();
+        new DeleteTokenAsyncTask().execute();
 
-        //or close this activity and bring back the Login
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        //End this Activity and remove it from the Activity back stack.
-        //finish();
     }
 
     private void loadFragment(Fragment frag) {
@@ -217,7 +214,7 @@ public class HomeActivity extends AppCompatActivity
                         .addFirstName(jsonConnection.getString("firstname"))
                         .addLastName(jsonConnection.getString("lastname"))
                         .addVerified(jsonConnection.getInt("verified"))
-                        .addID(jsonConnection.getString("memberid"))
+                        .addID(jsonConnection.getInt("memberid"))
                         .build());
                 }
 
@@ -409,6 +406,40 @@ public class HomeActivity extends AppCompatActivity
             Log.e("JSON_PARSE_ERROR!", e.getMessage());
             //notify user
             onWaitFragmentInteractionHide();
+        }
+    }
+
+    // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
+// we have something that allows us to do that.
+    class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            onWaitFragmentInteractionShow();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //since we are already doing stuff in the background, go ahead
+            //and remove the credentials from shared prefs here.
+            SharedPreferences prefs =
+                    getSharedPreferences(
+                            getString(R.string.keys_shared_prefs),
+                            Context.MODE_PRIVATE);
+            prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
+            prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
+            try {
+                //this call must be done asynchronously.
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                Log.e("FCM", "Delete error!");
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            finishAndRemoveTask();
         }
     }
 

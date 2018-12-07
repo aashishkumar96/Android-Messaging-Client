@@ -33,6 +33,7 @@
     <string name="no_connection_text">You have no connections!</string>
     <string name="text_search">Search connection</string>
     <string name="action_logout">Logout</string>
+    <string name="ep_with_token">with_token</string>
     <string name="verifyCode">Enter The Verification Code</string>
     <string name="EnterCode">Verification Code</string>
     <string name="VerifyButton">Verify</string>

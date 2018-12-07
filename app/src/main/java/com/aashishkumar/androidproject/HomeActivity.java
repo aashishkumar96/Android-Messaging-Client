@@ -63,9 +63,9 @@ public class HomeActivity extends AppCompatActivity
         ConnectionOnChatFragment.OnConnectionOnChatInteractionListener {
 
     private HomeFragment mHomeFragment;
-    private String mMemberID;
+    private int mMemberID;
     private String mMemberUsername;
-    private String mFriendID;
+    private int mFriendID;
     private String mFriendUsername;
 
     @Override
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Retrieve the user id and username from Main activity
-        mMemberID = getIntent().getStringExtra("id");
+        mMemberID = getIntent().getIntExtra("id", -999);
         mMemberUsername = getIntent().getStringExtra("username");
 
         if(savedInstanceState == null) {
@@ -474,7 +474,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onConnectionListFragmentInteraction(Connection item) {
         Bundle args = new Bundle();
-        mFriendID = Integer.toString(item.getMemID());
+        mFriendID = item.getMemID();
         mFriendUsername = item.getUsername();
         args.putString("username", mFriendUsername);
         args.putString("fname", item.getFirstName());
@@ -581,9 +581,9 @@ public class HomeActivity extends AppCompatActivity
         args.putString("chatname", chatName);
         args.putInt("chatid", chatID);
         args.putString("username_self", mMemberUsername);
-        args.putString("id_self", mMemberID);
+        args.putInt("id_self", mMemberID);
         args.putString("username_friend", mFriendUsername);
-        args.putString("id_friend", mFriendID);
+        args.putInt("id_friend", mFriendID);
         ChatWindowFragment frag = new ChatWindowFragment();
         frag.setArguments(args);
         loadFragment(frag);
@@ -660,7 +660,7 @@ public class HomeActivity extends AppCompatActivity
     public void onSearchListFragmentInteraction(Connection item) {
         // Get the memberid of the connection that you've searched
         // for later use (to add friend).
-        mFriendID = Integer.toString(item.getMemID());
+        mFriendID = item.getMemID();
 
         Bundle args = new Bundle();
         args.putString("username", item.getUsername());

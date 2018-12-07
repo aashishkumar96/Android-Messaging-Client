@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aashishkumar.androidproject.model.Credentials;
+import com.aashishkumar.androidproject.models.Credentials;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
 

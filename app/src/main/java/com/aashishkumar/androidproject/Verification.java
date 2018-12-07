@@ -1,9 +1,4 @@
 
-
-
-/**   DON"T REMOVE ABOVE COMMENTED CODE, WILL REMOVE BEFORE FINAL VERSION     */
-
-
 package com.aashishkumar.androidproject;
 
 import android.content.Context;
@@ -37,6 +32,8 @@ import org.json.JSONObject;
  * to handle interaction events.
  * Use the {@link Verification#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * @author  Aayush Shah
  */
 public class Verification extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -75,12 +72,6 @@ public class Verification extends Fragment {
     }
 
 
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +94,17 @@ public class Verification extends Fragment {
         //email.setText(myCredentials.getEmail());
         Button b = view.findViewById(R.id.verify_button);
         b.setOnClickListener(this::attemptVerification);
-//        b.setOnClickListener(this::attemptVerificationHCode);
         b = view.findViewById(R.id.resend_email_button);
-        b.setOnClickListener(this::reSendEmail);
+ //       b.setOnClickListener(this::reSendEmail);
         return view;
 
         // return inflater.inflate(R.layout.fragment_verification, container, false);
     }
 
-
+    /**
+     * When button is clicked.
+     * @param view The view
+     */
     public void onClick(View view) {
         if (mListener != null) {
             switch (view.getId()) {
@@ -124,125 +117,10 @@ public class Verification extends Fragment {
         }
     }
 
-//    private void attemptVerification(View view) {
-//
-//        EditText vcode = getActivity().findViewById(R.id.enter_verification_code_fragment);
-//
-//        boolean hasError = false;
-//
-//        if(vcode.getText().length() == 0) {
-//            hasError = true;
-//            vcode.setError("Error. Code can't be left empty.");
-//        } else if(vcode.getText().length() != 4) {
-//            hasError = true;
-//            vcode.setError("Error. Check your code.");
-//        }
-//
-////        if(!hasError) {
-////           // Uri verifyURI = this.duc.getVerifyEndPointURI();
-////
-////            Uri uri = Uri.parse("https://group-project-450.herokuapp.com/verfication");
-////
-////
-////            JSONObject msg = new JSONObject();
-////            try {
-////                msg.put("email", myCredentials.getEmail());
-////                msg.put("verficationCode",
-////                        Integer.parseInt(mCode.getText().toString()));
-////                System.out.println(msg.toString());
-////            } catch (JSONException e) {
-////                Log.wtf("CREDENTIALS", "Error creating JSON: " +
-////                        e.getMessage());
-////            }
-////            new SendPostAsyncTask.Builder(uri.toString(), msg)
-////                    .onPreExecute(this::handleVerifyOnPre)
-////                    .onPostExecute(this::handleVerifyOnPost)
-////                    .onCancelled(this::handleErrorsInTask)
-////                    .build().execute();
-////        }
-//
-//
-//
-//
-////        if (!hasError) {
-////            Credentials credentials = new Credentials.Builder(
-////                    vcode.getText().toString(),
-////                    .addUsername(vcode.getText().toString())
-//////                    .addFirstName(fname.getText().toString())
-//////                    .addLastName(lname.getText().toString())
-////                    .build();
-//
-//            //build the web service URL
-////            Uri uri = new Uri.Builder()
-////                    .scheme("https")
-////                    .appendPath(getString(R.string.ep_base_url))
-////                    .appendPath(getString(R.string.ep_register))
-////                    .build();
-//
-//            //build the JSONObject
-////            JSONObject msg = credentials.asJSONObject();
-////
-////            myCredentials = credentials;
-////
-////            //instantiate and execute the AsyncTask.
-////            //Feel free to add a handler for onPreExecution so that a progress bar
-////            //is displayed or maybe disable buttons.
-////            new SendPostAsyncTask.Builder(uri.toString(), msg)
-////                    .onPreExecute(this::handleVerifyOnPre)
-////                    .onPostExecute(this::handleVerifyOnPost)
-////                    .onCancelled(this::handleErrorsInTask)
-////                    .build().execute();
-////        }
-//
-//
-//
-//
-//        EditText uname = getActivity().findViewById(R.id.unameText_register_fragment);
-//        EditText fname = getActivity().findViewById(R.id.fnameText_register_fragment);
-//        EditText lname = getActivity().findViewById(R.id.lnameText_register_fragment);
-//        EditText regEmail = getActivity().findViewById(R.id.emailText_register_fragment);
-//        EditText regPass = getActivity().findViewById(R.id.passText_register_fragment);
-//
-//
-//        if (!hasError) {
-//            Credentials credentials = new Credentials.Builder(
-//                    regEmail.getText().toString(),
-//                    regPass.getText().toString())
-//                    vcode.getText().toString())
-//                    .addUsername(uname.getText().toString())
-//                    .addFirstName(fname.getText().toString())
-//                    .addLastName(lname.getText().toString())
-//                    .build();
-//
-//            //build the web service URL
-////            Uri uri = new Uri.Builder()
-////                    .scheme("https")
-////                    .appendPath(getString(R.string.ep_base_url))
-////                    .appendPath(getString(R.string.ep_register))
-////                    .build();
-//
-////            Uri uri = Uri.parse("https://group-project-450.herokuapp.com/register");
-//            Uri uri = Uri.parse("https://group-project-450.herokuapp.com/verfication");
-//
-//            //build the JSONObject
-//            JSONObject msg = credentials.asJSONObject();
-//
-//            myCredentials = credentials;
-//
-//            //instantiate and execute the AsyncTask.
-//            //Feel free to add a handler for onPreExecution so that a progress bar
-//            //is displayed or maybe disable buttons.
-//            System.out.println(uri.toString());
-//            new SendPostAsyncTask.Builder(uri.toString(), msg)
-//                    .onPreExecute(this::handleVerifyOnPre)
-//                    .onPostExecute(this::handleVerifyOnPost)
-//                    .onCancelled(this::handleErrorsInTask)
-//                    .build().execute();
-//        }
-//
-//    }
-
-
+    /**
+     * When user tries to verify.
+     * @param view The view.
+     */
     private void attemptVerification(View view) {
 
         Uri verifyURI = Uri.parse("https://group-project-450.herokuapp.com/verification");
@@ -266,61 +144,27 @@ public class Verification extends Fragment {
     }
 
 
-    private void attemptVerificationHCode(View view) {
-        EditText uname = getActivity().findViewById(R.id.unameText_register_fragment);
-        EditText fname = getActivity().findViewById(R.id.fnameText_register_fragment);
-        EditText lname = getActivity().findViewById(R.id.lnameText_register_fragment);
-        EditText regEmail = getActivity().findViewById(R.id.emailText_register_fragment);
-        EditText regPass = getActivity().findViewById(R.id.passText_register_fragment);
-
-        boolean hasError = false;
-
-        if (!hasError) {
-            Credentials credentials = new Credentials.Builder(
-                    regEmail.getText().toString(),
-                    regPass.getText().toString(),
-                    mCode.getText().toString())
-                    .addUsername(uname.getText().toString())
-                    .addFirstName(fname.getText().toString())
-                    .addLastName(lname.getText().toString())
-                    .addCode(mCode.getText().toString())
-                    .build();
-
-            //build the web service URL
-//            Uri uri = new Uri.Builder()
-//                    .scheme("https")
-//                    .appendPath(getString(R.string.ep_base_url))
-//                    .appendPath(getString(R.string.ep_register))
-//                    .build();
-
-            Uri uri = Uri.parse("https://group-project-450.herokuapp.com/verification");
-
-            //build the JSONObject
-            JSONObject msg = credentials.asJSONObject();
-
-            myCredentials = credentials;
-
-            //instantiate and execute the AsyncTask.
-            //Feel free to add a handler for onPreExecution so that a progress bar
-            //is displayed or maybe disable buttons.
-            System.out.println(uri.toString());
-            new SendPostAsyncTask.Builder(uri.toString(), msg)
-                    .onPreExecute(this::handleVerifyOnPre)
-                    .onPostExecute(this::handleVerifyOnPost)
-                    .onCancelled(this::handleErrorsInTask)
-                    .build().execute();
-        }
-    }
-
+    
+    /**
+     * Handle errors that may occur during the AsyncTask.
+     * @param result the error message provide from the AsyncTask
+     */
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR", result);
     }
 
+    /**
+     * Handle the setup of the UI before the HTTP call to the webservice.
+     */
     private void handleVerifyOnPre() {
         mListener.onWaitFragmentInteractionShow();
     }
 
-
+    /**
+     * Handle onPostExecute of the AsynceTask. The result from our webservice is
+     * a JSON formatted String. Parse it for success or failure.
+     * @param result the JSON formatted String response from the web service
+     */
     private void handleVerifyOnPost(String result) {
 
         Log.d("JSON result", result);
@@ -362,69 +206,57 @@ public class Verification extends Fragment {
         }
     }
 
-//        catch (JSONException e) {
-//            Log.e("JSON_PARSE_ERROR", result
-//                    + System.lineSeparator()
-//                    + e.getMessage());
-//            mListener.onWaitFragmentInteractionHide();
-//            ((TextView)
-//                    getView().findViewById(R.id.enter_verification_code_fragment))
-//                    .setError("Registration Unsuccessful");
-//        }
-//   }
 
 
-    private void reSendEmail(View view) {
-//        Uri resendEmail = this.duc.getResendEndPointURI();
+//     private void reSendEmail(View view) {
 
-        Uri uri = Uri.parse("https://group-project-450.herokuapp.com/verfication");
+//         Uri uri = Uri.parse("https://group-project-450.herokuapp.com/verfication");
 
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("email", myCredentials.getEmail());
-//            msg.put("nickname", myCredentials.getNickName());
-        }catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
-        }
-        new SendPostAsyncTask.Builder(uri.toString(), msg)
-                .onPreExecute(this::handleVerifyOnPre)
-                .onPostExecute(this::handleResendEmailOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
-    }
+//         JSONObject msg = new JSONObject();
+//         try {
+//             msg.put("email", myCredentials.getEmail());
+//         }catch (JSONException e) {
+//             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+//         }
+//         new SendPostAsyncTask.Builder(uri.toString(), msg)
+//                 .onPreExecute(this::handleVerifyOnPre)
+//                 .onPostExecute(this::handleResendEmailOnPost)
+//                 .onCancelled(this::handleErrorsInTask)
+//                 .build().execute();
+//     }
 
-    private void handleResendEmailOnPost(String result) {
+//     private void handleResendEmailOnPost(String result) {
 
-        try {
+//         try {
 
-            Log.d("JSON result",result);
-            JSONObject resultsJSON = new JSONObject(result);
-            String verificationStatus = result;
+//             Log.d("JSON result",result);
+//             JSONObject resultsJSON = new JSONObject(result);
+//             String verificationStatus = result;
 
-            if (verificationStatus.equals("Verification Number Matched")) { // success
-                mListener.onWaitFragmentInteractionHide();
-                mListener.verifiedUserSendToSuccess(registeredEmail);
-            } else if (verificationStatus.equals("Verification Number Not Matched")) { // Wrong Credentials
-                mListener.onWaitFragmentInteractionHide();
-                ((TextView)
-                        getView().findViewById(R.id.enter_verification_code_fragment))
-//                        .setError(getString(R.string.invalid_code));
-                        .setError("Well something is wrong..");
+//             if (verificationStatus.equals("Verification Number Matched")) { // success
+//                 mListener.onWaitFragmentInteractionHide();
+//                 mListener.verifiedUserSendToSuccess(registeredEmail);
+//             } else if (verificationStatus.equals("Verification Number Not Matched")) { // Wrong Credentials
+//                 mListener.onWaitFragmentInteractionHide();
+//                 ((TextView)
+//                         getView().findViewById(R.id.enter_verification_code_fragment))
+// //                        .setError(getString(R.string.invalid_code));
+//                         .setError("Well something is wrong..");
 
-            }
+//             }
 
-        } catch(JSONException e){
-            Log.e("JSON_PARSE_ERROR", result
-                    + System.lineSeparator()
-                    + e.getMessage());
-            mListener.onWaitFragmentInteractionHide();
-            ((TextView) getView().findViewById(R.id.enter_verification_code_fragment))
-                    .setError("Unsuccessful");
+//         } catch(JSONException e){
+//             Log.e("JSON_PARSE_ERROR", result
+//                     + System.lineSeparator()
+//                     + e.getMessage());
+//             mListener.onWaitFragmentInteractionHide();
+//             ((TextView) getView().findViewById(R.id.enter_verification_code_fragment))
+//                     .setError("Unsuccessful");
 
-        }
-    }
+//         }
+//     }
 
-        @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof

@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.model.Credentials;
+import com.aashishkumar.androidproject.models.Credentials;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -23,18 +23,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-/**
- * A simple {@link Fragment} subclass.
+
+ /*
+ * Fragment to handle the log in process
+ *
  * @author Aayush Shah
+ * @author Hien Doan
+ * @author Robert Bohlman
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private OnLoginFragmentInteractionListener mListener;
     private Credentials mCredentials;
     private int mMemberID;
+    private String mUsername;
     private String mFirebaseToken;
     private CheckBox mStayLoggedInCheck;
-    private String mUsername;
 
 
     public LoginFragment() {
@@ -48,12 +52,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
+        // Get the sign in button and add click listener to it
         Button login = (Button) v.findViewById(R.id.signinBtn_login_fragment);
         login.setOnClickListener(this);
 
+        // Get the register button and add click listener to it
         Button register = (Button) v.findViewById(R.id.registerBtn_login_fragment);
         register.setOnClickListener(view ->mListener.onRegisterClicked());
 
+        // GEt the stay logged in checkbox option
         mStayLoggedInCheck = (CheckBox) v.findViewById(R.id.checkBox_login_fragment);
 
         return v;
@@ -73,13 +80,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             final String email = prefs.getString(getString(R.string.keys_prefs_email), "");
             final String password = prefs.getString(getString(R.string.keys_prefs_password), "");
+
             //Load the two login EditTexts with the credentials found in SharedPrefs
             EditText emailEdit = getActivity().findViewById(R.id.enter_verification_code_fragment);
             emailEdit.setText(email);
             EditText passwordEdit = getActivity().findViewById(R.id.passText_login_fragment);
             passwordEdit.setText(password);
 
-            getFirebaseToken(email,  password);
+            getFirebaseToken(email, password);
         }
     }
 
@@ -97,6 +105,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * GEt the firebase token
+     *
+     * @param email is the email used to login
+     * @param password is password used to login
+     */
     private void getFirebaseToken(final String email, final String password) {
         mListener.onWaitFragmentInteractionShow();
 
@@ -124,7 +138,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Log user in
-     * @param theButton
+     * @param theButton is the view
      */
     private void attemptLogin(final View theButton) {
 
@@ -151,6 +165,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Helper method to check for email validation
+     *
+     * @param email is the email needed to be checked
+     * @return whether this email is valid or not
+     */
     private boolean isValidEmail(String email) {
         boolean result = false;
         char[] array = email.toCharArray();
@@ -224,20 +244,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
-            Log.d("DEBUG", "" + resultsJSON);
             boolean success = resultsJSON.getBoolean("success");
             mUsername = resultsJSON.getString("username");
             mMemberID = resultsJSON.getInt("memberid");
+            mUsername = resultsJSON.getString("username");
 
             //Log.e("username ", mUsername);
             //Log.e("userid ", mMemberID);
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
+                // Only save credentials if stay login is checked
                 if (mStayLoggedInCheck.isChecked()) {
                     saveCredentials(mCredentials);
                 }
-                //saveCredentials(mCredentials);
                 mListener.onLoginSuccess(mCredentials, mUsername, mMemberID);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
@@ -258,6 +278,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Helper method to save credential for stay logged in option
+     *
+     * @param credentials is the credentials of this member
+     */
     private void saveCredentials(final Credentials credentials) {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences(
@@ -267,6 +292,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         prefs.edit().putString(getString(R.string.keys_prefs_email), credentials.getEmail()).apply();
         prefs.edit().putString(getString(R.string.keys_prefs_password), credentials.getPassword()).apply();
     }
+
 
     @Override
     public void onAttach(Context context) {

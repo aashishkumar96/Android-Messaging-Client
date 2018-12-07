@@ -10,7 +10,7 @@
     android:layout_marginRight="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    tools:context=".ConnectionFragment"
+    tools:context=".connections.ConnectionFragment"
     tools:listitem="@layout/fragment_connection" >
 
 </android.support.v7.widget.RecyclerView>

@@ -10,14 +10,20 @@
             android:title="@string/nav_drawer_home" />
         <item
             android:id="@+id/nav_connections"
-            android:icon="@drawable/ic_connections"
+            android:icon="@drawable/ic_connection_list"
             android:title="@string/nav_drawer_connections" />
+        <item
+            android:id="@+id/nav_add_connection"
+            android:icon="@drawable/ic_add_connection"
+            android:title="@string/nav_drawer_add_connection" />
+        <item
+            android:id="@+id/nav_chats"
+            android:icon="@drawable/ic_chat_list"
+            android:title="@string/nav_drawer_chats" />
         <item
             android:id="@+id/nav_weather"
             android:icon="@drawable/ic_weather"
             android:title="@string/nav_drawer_weather" />
-
     </group>
-
 
 </menu>

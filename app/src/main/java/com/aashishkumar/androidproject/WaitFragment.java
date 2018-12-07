@@ -7,6 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Fragment to display progess circle when handle post request to webservice
+ * Taken from TCSS 450 lab
+ *
+ * @author Charles Bryan
+ */
 public class WaitFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;

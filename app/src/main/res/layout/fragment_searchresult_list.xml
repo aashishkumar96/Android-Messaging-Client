@@ -10,5 +10,5 @@
     android:layout_marginRight="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    tools:context=".SearchResultFragment"
+    tools:context=".connections.SearchResultFragment"
     tools:listitem="@layout/fragment_searchresult" />

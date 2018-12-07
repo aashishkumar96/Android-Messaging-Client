@@ -5,15 +5,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.aashishkumar.androidproject.model.Credentials;
-
+import com.aashishkumar.androidproject.models.Credentials;
 
 /**
  * Main activity - handle login and register
  *
- * @author Aayush Shah
  * @author Robert Bohlman
  * @author Hien Doan
+ * @author Aayush Shah
  */
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /* Once login successfully, start HomeActivity
+    /**
      *
      * @param mCredentials is the credential from login
      * @param username is the username get from login
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         mverification.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_main,mverification)
+                .replace(R.id.frame_main, mverification)
                 .addToBackStack(null);
 
         // Commit the transaction

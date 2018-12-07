@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aashishkumar.androidproject.model.Credentials;
+import com.aashishkumar.androidproject.models.Credentials;
 import com.aashishkumar.androidproject.utils.SendPostAsyncTask;
 
 import org.json.JSONException;
@@ -22,7 +22,10 @@ import org.json.JSONObject;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ *
+ * Fragment to handle registration process
+ *
+ * @author Hien Doan
  * @author Aayush Shah
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener{

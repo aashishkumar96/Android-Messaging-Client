@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Fragment to display the home page of this app.
+ *
+ * @author Robert Bohlman
+ * @author Hien Doan
  */
 public class HomeFragment extends Fragment {
 
@@ -33,9 +37,9 @@ public class HomeFragment extends Fragment {
 
         // Display the email/username used to login
         if (getArguments() != null) {
-            String emailAdd = getArguments().getString("emailAdd");
+            String username = getArguments().getString("username");
             TextView tv = getActivity().findViewById(R.id.textViewEmail);
-            tv.setText(emailAdd);
+            tv.setText(username);
         }
     }
 

@@ -3,7 +3,7 @@
     package="com.aashishkumar.androidproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -41,10 +41,6 @@ See README(https://goo.gl/l4GJaQ) for more. -->
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MyLocationsActivity"
-            android:label="@string/title_activity_my_locations"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

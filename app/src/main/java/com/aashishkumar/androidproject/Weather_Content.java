@@ -1,26 +1,17 @@
 package com.aashishkumar.androidproject;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
+
 
 public class Weather_Content {
 
 
-    public static boolean isNetworkAvailable(Context context)
-    {
-        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
-    }
-
-
-
-    public static String excuteGet(String targetURL)
-    {
+    public static String excuteGet(String targetURL) {
         URL url;
         HttpURLConnection connection = null;
         try {
@@ -58,34 +49,8 @@ public class Weather_Content {
     }
 
 
-    public static String setWeatherIcon(int actualId, long sunrise, long sunset){
-        int id = actualId / 100;
-        String icon = "";
-        if(actualId == 800){
-            long currentTime = new Date().getTime();
-            if(currentTime>=sunrise && currentTime<sunset) {
-                icon = "&#xf00d;";
-            } else {
-                icon = "&#xf02e;";
-            }
-        } else {
-            switch(id) {
-                case 2 : icon = "&#xf01e;";
-                    break;
-                case 3 : icon = "&#xf01c;";
-                    break;
-                case 7 : icon = "&#xf014;";
-                    break;
-                case 8 : icon = "&#xf013;";
-                    break;
-                case 6 : icon = "&#xf01b;";
-                    break;
-                case 5 : icon = "&#xf019;";
-                    break;
-            }
-        }
-        return icon;
-    }
+
+
 
 
 }

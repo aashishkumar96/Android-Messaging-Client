@@ -1,13 +1,20 @@
 package com.aashishkumar.androidproject;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.aashishkumar.androidproject.model.Credentials;
 
+
+/**
+ * Main activity - handle login and register
+ *
+ * @author Aayush Shah
+ * @author Robert Bohlman
+ * @author Hien Doan
+ */
 public class MainActivity extends AppCompatActivity
         implements LoginFragment.OnLoginFragmentInteractionListener,
         RegisterFragment.OnRegisterFragmentInteractionListener,
@@ -27,6 +34,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /* Once login successfully, start HomeActivity
+     *
+     * @param mCredentials is the credential from login
+     * @param id is the member id get from login
+     */
     @Override
     public void onLoginSuccess(Credentials mCredentials, String id) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
@@ -37,7 +49,26 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /* Once login successfully, start HomeActivity
+     *
+     * @param mCredentials is the credential from login
+     * @param username is the username get from login
+     * @param id is the member id get from login
+     */
+    @Override
+    public void onLoginSuccess(Credentials mCredentials, String username, String id) {
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.putExtra("email", mCredentials.getEmail());
+        intent.putExtra("username", username);
+        intent.putExtra("id", id);
+        MainActivity.this.startActivity(intent);
+        finish();
+    }
 
+    /**
+     * Once register button is clicked in LoginFragment,
+     * go to the RegisterFragment.
+     */
     @Override
     public void onRegisterClicked() {
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -49,6 +80,10 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    /**
+     * Successfully registered,
+     * go to the verification frag.
+     */
     @Override
     public void onRegisterSuccess(Credentials mCredentials,String email) {
         Bundle bundle=new Bundle();
@@ -64,6 +99,9 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    /**
+     * Load and display the wait fragment
+     */
     @Override
     public void onWaitFragmentInteractionShow() {
         getSupportFragmentManager()
@@ -73,6 +111,9 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * Hide the wait fragment
+     */
     @Override
     public void onWaitFragmentInteractionHide() {
         getSupportFragmentManager()
